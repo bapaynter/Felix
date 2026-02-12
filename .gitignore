@@ -1,0 +1,43 @@
+# Sensitive files - NEVER commit these
+.openclaw-env
+*.key
+*.pem
+*.p12
+.env
+.env.*
+
+# Logs and temporary files
+memory/*.log
+memory/heartbeat-state.json
+memory/*-alert.json
+memory/health-summary.json
+*.tmp
+*.bak
+.cache/
+node_modules/
+
+# Nested git repositories (handle as submodules)
+electric_lab_vue3/
+ion/
+obsidian/
+pharmacy_ai_agent/
+pmk/
+pmk_js/
+provider-admin-portal/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+.health-test
+.test-write
+
+# OpenClaw runtime files
+avatars/

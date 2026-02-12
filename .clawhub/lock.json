@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "skills": {
+    "openrouter-transcribe": {
+      "version": "1.0.0",
+      "installedAt": 1770667774522
+    },
+    "opencode-controller": {
+      "version": "1.0.0",
+      "installedAt": 1770834368978
+    }
+  }
+}
