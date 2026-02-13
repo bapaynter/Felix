@@ -572,15 +572,16 @@ function runProactiveScans() {
         // Ignore if files don't exist
     }
 
-    // 2. Cron health check - check for recent job runs
+    // 2. Cron health check - check for cron jobs file
     try {
-        // Check if cron scheduler is responsive
-        const cronStatus = execSync('curl -s http://localhost:18789/cron/status 2>/dev/null || echo "offline"', { 
-            encoding: 'utf8', 
-            timeout: 5000 
-        });
-        if (cronStatus.includes('offline') || cronStatus.length < 10) {
-            findings.push(`⚠️ Cron scheduler may be unresponsive`);
+        const cronFile = '/home/pi/.openclaw/cron/jobs.json';
+        if (existsSync(cronFile)) {
+            const cronData = JSON.parse(readFileSync(cronFile, 'utf8'));
+            if (!cronData.jobs || cronData.jobs.length === 0) {
+                findings.push(`⚠️ Cron scheduler has no jobs`);
+            }
+        } else {
+            findings.push(`⚠️ Cron jobs file not found`);
         }
     } catch (err) {
         findings.push(`❌ Cron health check failed: ${err.message}`);
@@ -594,10 +595,12 @@ function runProactiveScans() {
     for (const backup of backupLogs) {
         try {
             const lastLine = execSync(`tail -1 ${backup.file} 2>/dev/null`, { encoding: 'utf8' });
-            // Check if backup was in last 24 hours
-            const timestamp = lastLine.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
+            // Check if backup was in last 24 hours - look for any date-like pattern
+            const timestamp = lastLine.match(/(\d{4}-\d{2}-\d{2})/);
             if (timestamp) {
-                const backupTime = new Date(timestamp[1]);
+                // Try to parse as date (add time 00:00:00 if not present)
+                const dateStr = timestamp[1].length === 10 ? timestamp[1] + 'T00:00:00Z' : timestamp[1];
+                const backupTime = new Date(dateStr);
                 const hoursAgo = (now - backupTime) / (1000 * 60 * 60);
                 if (hoursAgo > 24) {
                     findings.push(`⚠️ ${backup.name} backup > 24h ago`);

@@ -224,7 +224,8 @@ function generateCommitMessage(changes) {
 }
 
 function logBackup(results) {
-    const logEntry = `${results.timestamp} - Backup ${results.success ? 'SUCCESS' : 'FAILED'}\n`;
+    const timestamp = results.timestamp;
+    const logEntry = `${timestamp} - Backup ${results.success ? 'SUCCESS' : 'FAILED'}\n`;
     const details = `Changes: ${results.changes.length}, Errors: ${results.errors.length}\n`;
     
     try {
