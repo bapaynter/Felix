@@ -553,16 +553,61 @@ function logGitActivity(repo, commits) {
 
 function runProactiveScans() {
     const findings = [];
+    const now = new Date();
 
-    // Disk space check
+    // NOTE: Disk, memory (RAM), and load checks are handled by health-critical-simple.mjs (every 5 min)
+    // This function focuses on file-based and service health checks
+
+    // 1. Memory growth check - monitor memory/*.md file sizes (file storage, not RAM)
     try {
-        const df = execSync('df -h / | tail -1', { encoding: 'utf8' });
-        const usage = parseInt(df.match(/(\d+)%/)[1]);
-        if (usage > 85) {
-            findings.push(`⚠️ Disk usage at ${usage}%`);
+        const memoryPath = join(WORKSPACE, 'memory');
+        const du = execSync(`du -sh ${memoryPath}/*.md 2>/dev/null | tail -1`, { encoding: 'utf8' });
+        const size = du.trim().split('\t')[0];
+        // Alert if memory folder > 1MB
+        const totalSize = execSync(`du -sb ${memoryPath}/*.md 2>/dev/null | awk '{sum+=$1} END {print sum}'`, { encoding: 'utf8' }).trim();
+        if (parseInt(totalSize) > 1048576) {
+            findings.push(`📁 Memory folder at ${size} (>1MB)`);
         }
     } catch (err) {
-        // Ignore
+        // Ignore if files don't exist
+    }
+
+    // 2. Cron health check - check for recent job runs
+    try {
+        // Check if cron scheduler is responsive
+        const cronStatus = execSync('curl -s http://localhost:18789/cron/status 2>/dev/null || echo "offline"', { 
+            encoding: 'utf8', 
+            timeout: 5000 
+        });
+        if (cronStatus.includes('offline') || cronStatus.length < 10) {
+            findings.push(`⚠️ Cron scheduler may be unresponsive`);
+        }
+    } catch (err) {
+        findings.push(`❌ Cron health check failed: ${err.message}`);
+    }
+
+    // 3. Backup verification - check last backup timestamp
+    const backupLogs = [
+        { file: '/home/pi/.openclaw/workspace/memory/backup.log', name: 'Git backup' },
+        { file: '/home/pi/.openclaw/workspace/memory/tailscale-backup.log', name: 'Tailscale backup' }
+    ];
+    for (const backup of backupLogs) {
+        try {
+            const lastLine = execSync(`tail -1 ${backup.file} 2>/dev/null`, { encoding: 'utf8' });
+            // Check if backup was in last 24 hours
+            const timestamp = lastLine.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
+            if (timestamp) {
+                const backupTime = new Date(timestamp[1]);
+                const hoursAgo = (now - backupTime) / (1000 * 60 * 60);
+                if (hoursAgo > 24) {
+                    findings.push(`⚠️ ${backup.name} backup > 24h ago`);
+                }
+            } else {
+                findings.push(`⚠️ ${backup.name} - no timestamp found`);
+            }
+        } catch (err) {
+            findings.push(`⚠️ ${backup.name} log not found`);
+        }
     }
 
     if (findings.length === 0) {

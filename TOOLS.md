@@ -180,16 +180,16 @@ Installed skill: `openrouter-transcribe` — Transcribe audio files via OpenRout
 
 ```bash
 # Basic transcription
-~/repos/openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh /path/to/audio.m4a
+/home/pi/.openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh /path/to/audio.m4a
 
 # With speaker labels
-~/repos/openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.m4a --prompt "Transcribe with speaker labels"
+/home/pi/.openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.m4a --prompt "Transcribe with speaker labels"
 
 # Custom model (default is Gemini Flash)
-~/repos/openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.ogg --model openai/gpt-4o-audio-preview
+/home/pi/.openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.ogg --model openai/gpt-4o-audio-preview
 
 # Save to file
-~/repos/openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.m4a --out /tmp/transcript.txt
+/home/pi/.openclaw/workspace/skills/openrouter-transcribe/scripts/transcribe.sh audio.m4a --out /tmp/transcript.txt
 ```
 
 ### For Voice Messages
@@ -208,19 +208,19 @@ Cloned repos for coding agent context:
 
 | Repo | Path | Description |
 |------|------|-------------|
-| ion | `~/workspace/ion` | Main platform |
-| pmk | `~/workspace/pmk` | Pharmacy management kit |
-| electric_lab_vue3 | `~/workspace/electric_lab_vue3` | Vue 3 frontend |
-| pmk_js | `~/workspace/pmk_js` | PMK JavaScript components |
-| pharmacy_ai_agent | `~/workspace/pharmacy_ai_agent` | AI agent for pharmacy |
-| provider-admin-portal | `~/workspace/provider-admin-portal` | Admin portal |
+| ion | `/home/pi/.openclaw/workspace/ion` | Main platform |
+| pmk | `/home/pi/.openclaw/workspace/pmk` | Pharmacy management kit |
+| electric_lab_vue3 | `/home/pi/.openclaw/workspace/electric_lab_vue3` | Vue 3 frontend |
+| pmk_js | `/home/pi/.openclaw/workspace/pmk_js` | PMK JavaScript components |
+| pharmacy_ai_agent | `/home/pi/.openclaw/workspace/pharmacy_ai_agent` | AI agent for pharmacy |
+| provider-admin-portal | `/home/pi/.openclaw/workspace/provider-admin-portal` | Admin portal |
 
 ### Searching Repos
 
 The coding agent can use `rg` (ripgrep) for fast code search:
 ```bash
-rg "function name" ~/repos/
-rg -tjs "import.*react" ~/repos/pmk_js/
+rg "function name" /home/pi/.openclaw/workspace/
+rg -tjs "import.*react" /home/pi/.openclaw/workspace/pmk_js/
 ```
 
 ### Indexing Options
@@ -289,6 +289,122 @@ bash pty:true workdir:~/project command:"opencode run 'Your coding task' -m open
 # Background task  
 bash pty:true workdir:~/project background:true command:"opencode run 'Your task' -m openrouter/anthropic/claude-sonnet-4.5"
 ```
+
+## Playwright Browser Control
+
+Headless browser automation with persistent sessions for interactive form filling.
+
+### Location
+
+**Skill:** `/home/pi/.openclaw/workspace/skills/playwright/`
+**Server:** `skills/playwright/scripts/browser-server.js`
+**One-shot session:** `skills/playwright/scripts/session.js`
+
+### Persistent Browser Mode (For Interactive Workflows)
+
+Use when you need to pause mid-workflow for user input:
+
+```javascript
+// Start persistent browser server
+exec({
+    command: 'node /home/pi/.openclaw/workspace/skills/playwright/scripts/browser-server.js',
+    background: true,
+    pty: false
+});
+
+// Open a page
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"open","args":["https://example.com/form"]}\n'
+});
+
+// Fill partial form
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"type","args":["#email","user@example.com"]}\n'
+});
+
+// Check current value
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"get-value","args":["#comment"]}\n'
+});
+
+// *** ASK USER FOR INPUT ***
+// "What should the comment say?"
+// User replies: "Say XYZ"
+
+// Continue with user input
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"type","args":["#comment","XYZ"]}\n'
+});
+
+// Submit form
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"click","args":[".submit"]}\n'
+});
+
+// Close when done
+process({
+    action: 'write',
+    sessionId: '<session-id>',
+    data: '{"command":"close","args":[]}\n'
+});
+```
+
+### One-Shot Session Mode (Fully Automated)
+
+For workflows that don't need pauses:
+
+```bash
+node /home/pi/.openclaw/workspace/skills/playwright/scripts/session.js \
+    "https://example.com" \
+    "type|#email|user@example.com" \
+    "click|.submit" \
+    "wait|.success"
+```
+
+### Commands
+
+All commands are JSON objects: `{"command":"<cmd>","args":[...]}`
+
+**Navigation:**
+- `open <url>` - Open page
+- `goto <url>` - Navigate to URL
+
+**Reading State:**
+- `title` - Get page title
+- `url` - Get current URL
+- `content` - Get all text
+- `html` - Get full HTML
+- `text <selector>` - Get element text
+- `get-value <selector>` - Get input field value
+- `exists <selector>` - Check if element exists
+- `links` - List all links
+
+**Interaction:**
+- `click <selector>` - Click element
+- `type <selector> <text>` - Fill input field
+- `wait <selector>` - Wait for element
+- `eval <javascript>` - Execute JavaScript
+
+**Utility:**
+- `screenshot [path]` - Take screenshot
+- `ping` - Check server alive
+- `close` - Close browser & exit
+
+### Auto-Cleanup
+
+- Browser closes after 10 minutes of inactivity
+- Responds to SIGTERM/SIGINT for graceful shutdown
+- Each command resets the inactivity timer
 
 ## Common Mistakes & Fixes
 

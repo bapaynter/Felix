@@ -51,6 +51,70 @@ function gogCommand(cmd) {
   }
 }
 
+// Levenshtein distance for fuzzy matching (handles typos)
+function levenshteinDistance(a, b) {
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+// Fuzzy category matching - handles variations and partial matches
+function matchCategory(response) {
+  const normalized = response.toLowerCase().trim();
+  
+  // Exact matches
+  const exactMap = {
+    'dev': 'Dev',
+    'github': 'GitHub',
+    'support': 'Support',
+    'internal': 'Internal',
+    'personal': 'Personal',
+    'ghostinspector': 'GhostInspector'
+  };
+  if (exactMap[normalized]) return exactMap[normalized];
+  
+  // Partial/fuzzy matches
+  if (normalized.includes('github')) return 'GitHub';
+  if (normalized.includes('ghostinspector')) return 'GhostInspector';
+  if (normalized.includes('support') || normalized.includes('help')) return 'Support';
+  if (normalized.includes('internal') || normalized.includes('team') || normalized.includes('hr')) return 'Internal';
+  if (normalized.includes('dev') || normalized.includes('code') || normalized.includes('deploy')) return 'Dev';
+  
+  // Levenshtein distance matching (allow up to 2 character difference)
+  const targets = [
+    { word: 'dev', category: 'Dev' },
+    { word: 'support', category: 'Support' },
+    { word: 'internal', category: 'Internal' },
+    { word: 'personal', category: 'Personal' },
+    { word: 'github', category: 'GitHub' },
+    { word: 'ghostinspector', category: 'GhostInspector' }
+  ];
+  
+  for (const { word, category } of targets) {
+    const distance = levenshteinDistance(normalized, word);
+    // Allow up to 30% difference or max 2 chars, whichever is smaller
+    const maxDistance = Math.min(Math.floor(word.length * 0.3) + 1, 2);
+    if (distance <= maxDistance) return category;
+  }
+  
+  return null; // No match found
+}
+
 async function categorizeWithAI(from, subject) {
   const apiKey = process.env.OPENROUTER_API_KEY;
   
@@ -61,6 +125,8 @@ async function categorizeWithAI(from, subject) {
   if (/ghostinspector/i.test(from + subject)) return 'GhostInspector';
   // Crisp/Support emails
   if (/crisp\.email|messages@pharmetika|customer support|support@crisp/i.test(from + subject)) return 'Support';
+  // Support keyword in subject
+  if (/^support\b|\bsupport\b/i.test(subject) && !/@github\.com|ghostinspector/i.test(from)) return 'Support';
   // Dev emails (CI/CD, deployments, code reviews)
   if (/codex|deployment|test|ci\/cd|build|pull request|PR review|git commit/i.test(from + subject)) return 'Dev';
   // Internal emails
@@ -92,7 +158,7 @@ Reply with ONLY the category name.`;
         'HTTP-Referer': 'https://openclaw.local'
       },
       body: JSON.stringify({
-        model: 'google/gemini-flash-1.5',
+        model: 'google/gemini-3-flash-preview',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 15,
         temperature: 0
@@ -100,10 +166,11 @@ Reply with ONLY the category name.`;
     });
 
     const data = await response.json();
-    const category = data.choices?.[0]?.message?.content?.trim();
+    const rawCategory = data.choices?.[0]?.message?.content?.trim();
     
-    if (CATEGORIES.includes(category)) return category;
-    return 'Personal'; // Default fallback
+    // Try fuzzy matching first, then fallback to Personal
+    const matched = matchCategory(rawCategory);
+    return matched || 'Personal';
   } catch (e) {
     console.error('AI categorization failed:', e.message);
     return 'Personal';
@@ -146,14 +213,14 @@ async function sortEmails() {
     // Categorize
     const category = await categorizeWithAI(from, subject);
     
-    // Move: archive from inbox + apply label (use msgId, not threadId)
+    // Apply single label and remove from INBOX
     try {
       gogCommand(`labels modify ${msgId} --add "${category}"`);
       gogCommand(`labels modify ${msgId} --remove "INBOX"`);
       console.log(`→ ${category}: ${subject.substring(0, 50)}...`);
       sorted++;
     } catch (e) {
-      console.error(`Failed to move ${msgId}:`, e.message);
+      console.error(`Failed to label ${msgId}:`, e.message);
       errors++;
     }
   }

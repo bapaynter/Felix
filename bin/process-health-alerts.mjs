@@ -4,7 +4,7 @@
  * Runs every minute to process health alerts
  */
 
-import { existsSync, unlinkSync, readFileSync } from 'fs';
+import { existsSync, unlinkSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 
@@ -25,18 +25,29 @@ async function processHealthAlerts() {
                 // Read and parse the alert
                 const alertData = JSON.parse(readFileSync(fullPath, 'utf8'));
                 
-                // Create the cron job using the cron tool
-                const cronCmd = `node -e "
-const cron = require('cron');
-const cronJob = ${JSON.stringify(alertData)};
-console.log(JSON.stringify(cronJob));
-" | curl -X POST http://localhost:18789/cron/add \
-  -H 'Content-Type: application/json' \
-  -d @-`;
+                // Create a simple script that uses the cron tool
+                const alertScript = `
+import { cron } from 'openclaw';
+cron.add(${JSON.stringify(alertData)}).then(() => {
+    console.log('Alert cron job created successfully');
+    process.exit(0);
+}).catch(err => {
+    console.error('Failed to create alert:', err.message);
+    process.exit(1);
+});
+`;
                 
-                execSync(cronCmd, { timeout: 10000 });
+                const scriptPath = join(WORKSPACE, '.temp-alert-script.mjs');
+                writeFileSync(scriptPath, alertScript);
                 
-                // Remove the alert file
+                // Run the script with full node path
+                execSync(`/home/pi/.nvm/versions/node/v25.6.0/bin/node ${scriptPath}`, { 
+                    timeout: 10000,
+                    cwd: WORKSPACE 
+                });
+                
+                // Clean up
+                unlinkSync(scriptPath);
                 unlinkSync(fullPath);
                 
                 console.log(`Processed alert: ${alertFile}`);

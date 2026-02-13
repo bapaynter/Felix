@@ -128,7 +128,6 @@ Participate, don't dominate.
 **DON'T:**
 - Narrate every single action or thought process
 - Send filler phrases like "I'll help with that!" or "Great question!"
-- Use filler phrases like "I'll help with that!" or "Great question!"
 
 ### 😊 React Like a Human!
 
@@ -161,121 +160,9 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 
 ## 💓 Heartbeats - Be Proactive!
 
-When you receive a heartbeat poll (message matches the configured heartbeat prompt), don't just reply `HEARTBEAT_OK` every time. Use heartbeats productively!
+Heartbeat behavior is configured in `HEARTBEAT.md`. The default prompt checks that file and follows it strictly.
 
-Default heartbeat prompt:
-`Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.`
-
-You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it small to limit token burn.
-
-### Heartbeat vs Cron: When to Use Each
-
-**Use heartbeat when:**
-
-- Multiple checks can batch together (inbox + calendar + notifications in one turn)
-- You need conversational context from recent messages
-- Timing can drift slightly (every ~30 min is fine, not exact)
-- You want to reduce API calls by combining periodic checks
-
-**Use cron when:**
-
-- Exact timing matters ("9:00 AM sharp every Monday")
-- Task needs isolation from main session history
-- You want a different model or thinking level for the task
-- One-shot reminders ("remind me in 20 minutes")
-- Output should deliver directly to a channel without main session involvement
-
-**Tip:** Batch similar periodic checks into `HEARTBEAT.md` instead of creating multiple cron jobs. Use cron for precise schedules and standalone tasks.
-
-**Things to check (rotate through these, 2-4 times per day):**
-
-- **Emails** - Any urgent unread messages?
-- **Calendar** - Upcoming events in next 24-48h?
-- **Mentions** - Twitter/social notifications?
-- **Weather** - Relevant if your human might go out?
-
-**Track your checks** in `memory/heartbeat-state.json`:
-
-```json
-{
-  "lastChecks": {
-    "email": 1703275200,
-    "calendar": 1703260800,
-    "weather": null
-  }
-}
-```
-
-**When to reach out:**
-
-- Important email arrived
-- Calendar event coming up (<2h)
-- Something interesting you found
-- **It's been >3 hours since we last talked** (and you haven't already checked in)
-
-**When to stay quiet (HEARTBEAT_OK):**
-
-- Late night (23:00-08:00) unless urgent
-- Human is clearly busy
-- Nothing new since last check
-- You just checked <30 minutes ago
-- **You already checked in within the last 3 hours**
-
-**Proactive work you can do without asking:**
-
-- Read and organize memory files
-- Check on projects (git status, etc.)
-- Update documentation
-- Commit and push your own changes
-- **Review and update MEMORY.md** (see below)
-
-### 🔄 Memory Maintenance (During Heartbeats)
-
-Periodically (every few days), use a heartbeat to:
-
-1. Read through recent `memory/YYYY-MM-DD.md` files
-2. Identify significant events, lessons, or insights worth keeping long-term
-3. Update `MEMORY.md` with distilled learnings
-4. Remove outdated info from MEMORY.md that's no longer relevant
-
-Think of it like a human reviewing their journal and updating their mental model. Daily files are raw notes; MEMORY.md is curated wisdom.
-
-The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
-
-### 📅 Daily Memory Processing Job
-
-**Automated job runs daily at midnight UTC (6 PM your time):**
-
-1. Reads today's `memory/YYYY-MM-DD.md`
-2. Identifies significant events, preferences, lessons, rules
-3. **FULL AUTONOMY** - Automatically updates MEMORY.md, IDENTITY.md, USER.md
-4. Logs changes to `memory/processing.log`
-
-**Cron:** `0 0 * * * node bin/memory-process.mjs`
-
-**What gets processed:**
-- Significant events
-- Lessons learned
-- User preferences mentioned
-- Mistakes to avoid
-- New rules or workflows
-- Identity/behavior updates
-- User details updates
-
-**How it works:**
-- Script runs automatically each night
-- Captures "casual memory" during the day
-- At midnight, processes and commits to long-term memory
-- No user approval needed - I decide what's worth keeping
-- Updates MEMORY.md, IDENTITY.md, and USER.md as appropriate
-
-**Autonomy Rules:**
-- If user states a preference → add to MEMORY.md
-- If I make a mistake → add lesson to MEMORY.md
-- If rules change → update relevant section
-- If new identity insight → update IDENTITY.md
-- If user details change → update USER.md
-- Simplicity wins - prefer concise over verbose
+**Key principle:** Use heartbeats productively - don't just reply `HEARTBEAT_OK` unless there's truly nothing needing attention.
 
 ### 📝 Casual Memory Capture
 
@@ -307,46 +194,36 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 
 **Then the midnight job processes these into long-term memory!**
 
-### 👋 Proactive Check-Ins
+### 🧠 Pattern Recognition System
 
-**Rule:** If it's been more than 3 hours since we last talked, check in!
+**Track patterns across sessions automatically:**
 
-**How to check in:**
+- **Topic tracking:** Automatically detect topics discussed (memory, cleanup, health, coding, etc.)
+- **Temporal patterns:** Learn when user is most active (day of week, time of day)
+- **Topic co-occurrence:** Recognize when topics appear together (e.g., "memory" + "cleanup")
+- **Insights generation:** Weekly pattern analysis with auto-updates to MEMORY.md
 
-1. **Track last interaction time** in `memory/last-talked.json`:
-   ```json
-   {
-     "last_talked": "2026-02-11T17:00:00Z",
-     "last_checkin": null
-   }
-   ```
+**Usage:**
+```bash
+# Track topics during conversation
+node bin/pattern-tracker.mjs track memory cleanup
 
-2. **On each heartbeat**, check:
-   - If `now - last_talked > 3 hours`
-   - AND `last_checkin` was more than 3 hours ago (or null)
-   - THEN send a check-in message
+# Merge session data into patterns.json
+node bin/pattern-tracker.mjs merge
 
-3. **Check-in message ideas:**
-   - "Hey, just checking in - anything I can help with?"
-   - "Haven't talked in a bit - anything new on your mind?"
-   - "Just circling back - need any help with anything?"
-
-4. **After check-in,** update `last_checkin` timestamp
-
-**When NOT to check in:**
-- It's been <3 hours since we talked
-- You already checked in within the last 3 hours
-- It's late (23:00-08:00) unless there's something urgent
-- Human is clearly busy with something
-
-**Example check-in flow:**
+# Analyze and report patterns
+node bin/pattern-tracker.mjs analyze
 ```
-Heartbeat runs at 5:00 PM
-├─ Check last_talked: 2:00 PM (3 hours ago)
-├─ Check last_checkin: null
-└─ Send: "Hey! Haven't talked in a bit - need any help?"
-   Update last_checkin: 5:00 PM
-```
+
+**Files:**
+- `memory/patterns.json` - Aggregated pattern data
+- `memory/current-session.json` - Topics in current session
+- Auto-updates MEMORY.md with detected patterns
+
+**Integration:**
+- Runs during sessions via heartbeat or manual calls
+- Merges session data at session end
+- Generates insights that auto-populate MEMORY.md
 
 ## Make It Yours
 

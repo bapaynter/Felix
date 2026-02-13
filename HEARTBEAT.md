@@ -24,9 +24,8 @@ node bin/heartbeat-runner.mjs
 | **email** | 5 min | 9 AM - 9 PM | `gog gmail search` + auto-sort (`node bin/ai-sort-emails.mjs`) |
 | **calendar-reminders** | 1440 min | 6 AM UTC only | Setup daily reminder crons (`bin/calendar-reminders.mjs`) |
 | **todoist** | 30 min | 24/7 | v1 Sync API (`/api/v1/sync`) |
-| **git_status** | 24 hours | 24/7 | **DISABLED** - No longer needed (dedicated machine) |
 | **git_update** | 2 hours | 24/7 | Smart sync with important change detection |
-| **proactive_scans** | 24 hours | 3 AM only | **REPLACED** by autonomous health monitoring |
+| **e621-fetch** | 4 hours | 24/7 | Fetches art based on conversation topics (`bin/e621-fetch-heartbeat.mjs`) |
 
 ## Time Window Logic
 
@@ -57,10 +56,6 @@ Categories:
 - **GhostInspector** — Test results, automation alerts
 
 Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to pattern matching if no API key.
-
-### Calendar Check
-- **REMOVED** - Superseded by calendar-reminders check
-- The midnight setup now handles all calendar reminders efficiently
 
 ### Calendar Reminders (Daily Setup)
 - Runs once daily at **6 AM UTC** (midnight your time, GMT-6)
@@ -97,9 +92,6 @@ Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to
   - Movies Watchlist: `6fxpQchM4gJfWHwP`
 - **Task status**: `checked` (not `is_completed`)
 
-### Git Status Check
-- **DISABLED** - No longer needed (dedicated machine, no human conflicts)
-
 ### Git Update Check (Smart Sync)
 - Pull latest changes from all repos with intelligence:
   - `~/workspace/ion`, `~/workspace/pmk`, `~/workspace/electric_lab_vue3`, `~/workspace/pmk_js`
@@ -111,9 +103,27 @@ Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to
 - **Optimized:** Direct pull (no stash complexity), parallel fetch planned
 - **Alerts on:** Important changes, security updates, repo health issues
 
-### Proactive Scans
-- **REPLACED** by autonomous health monitoring system
-- See: Autonomous Health Monitoring section below
+### e621 Art Fetcher
+- **Uses existing skill:** `skills/e621-search/scripts/search.sh`
+- **Fetches based on:** Top 3 topics from `memory/patterns.json`
+- **Tag mapping:** Converts topics to e621 tags (e.g., "mountain biking" → `mountain_biking`)
+- **Fallback:** If no topic matches, uses `furry anthro`
+- **Storage:** `images/e621/` directory
+- **Tracking:** `memory/e621-manifest.json` (shown/unshown status)
+- **Max images:** 100 (auto-deletes oldest)
+- **Commands:**
+  - `node bin/e621-fetch-heartbeat.mjs` - Manual fetch
+  - `node bin/show-art.mjs` - View collection
+
+### Proactive Scans (Tier 1 Checks)
+- **Schedule:** Every 4 hours (cron: `0 */4 * * *`)
+- **Note:** Disk, memory (RAM), and load checks are handled by `health-critical-simple.mjs` (every 5 min)
+- **File-based checks:**
+  1. **Memory folder growth** - Alert if memory folder >1MB
+  2. **Cron health** - Verify cron scheduler is responsive
+  3. **Backup verification** - Check last backup timestamp (alert if >24h ago)
+- **Scripts:** `bin/heartbeat-runner.mjs` (runProactiveScans function)
+- **Log file:** `memory/proactive-scan.log`
 
 ## Autonomous Health Monitoring
 
@@ -123,7 +133,7 @@ Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to
 
 | Check | Frequency | Script | Alerts On |
 |-------|----------|--------|-----------|
-| **Critical Health** | Every 5 min | `bin/health-critical.mjs` | Disk >85%, Memory >90%, Gateway down, API failure |
+| **Critical Health** | Every 5 min | `bin/health-critical-simple.mjs` | Disk >85%, Memory >90%, Gateway down, API failure |
 | **Resource Health** | Every 30 min | `bin/health-resources.mjs` | High CPU/Memory/Load, Network issues, Zombie processes |
 | **Daily Health** | 6 AM UTC | `bin/health-daily.mjs` | Repo issues, Security alerts, System summary |
 | **Alert Processor** | Every 1 min | `bin/process-health-alerts.mjs` | Converts health alerts to cron jobs |
@@ -161,7 +171,6 @@ Highest overdue_score wins. Checks outside their active window get score = 0.
 - Proactive scan found issues
 
 **Silent checks (never report):**
-- Git status — disabled
 - Git update — reports important changes and security updates
 
 **Return HEARTBEAT_OK if:**

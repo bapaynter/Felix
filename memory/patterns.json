@@ -1,0 +1,82 @@
+{
+  "topics": {
+    "memory": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "cleanup": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "health": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "todoist api": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "email sorting": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "memory processing": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "cron jobs": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    },
+    "health monitoring": {
+      "count": 1,
+      "firstSeen": "2026-02-12",
+      "lastSeen": "2026-02-12",
+      "sessions": [
+        "2026-02-12"
+      ]
+    }
+  },
+  "temporal": {
+    "days": {
+      "thursday": 2
+    },
+    "hours": {
+      "17": 2
+    }
+  },
+  "sessionStats": {
+    "total": 2,
+    "today": 2,
+    "lastDate": "2026-02-12"
+  },
+  "lastUpdated": "2026-02-12T17:58:34.398Z"
+}

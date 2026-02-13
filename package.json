@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "ical.js": "^2.2.1",
+    "playwright": "^1.58.2",
     "rrule": "^2.8.1"
   }
 }

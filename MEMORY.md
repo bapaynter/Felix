@@ -3,6 +3,7 @@
 ### Communication
 - **Always tell user when updating memory/md files** - Don't silently update files, announce it
 - Convert times to user's timezone (GMT-6) when displaying calendar events
+- **Send files directly** - Don't just list paths, use `message` tool with `path` to send the actual file to the user
 
 ### Coding Tasks
 - **Use opencode-controller skill** - Installed at `/home/pi/.openclaw/workspace/skills/opencode-controller`
@@ -34,3 +35,8 @@
 - User wants midnight UTC cron for memory processing (6 PM their time)
 - User wants me to be more proactive about remembering things
 - User likes explicit announcements when memory files are updated
+### Detected Patterns
+- Active topics: memory, cleanup, health, todoist api, email sorting, memory processing, cron jobs, health monitoring
+- Temporal patterns: Most active Thursdays around 17:00 UTC
+- Session count: 2 sessions tracked (Feb 11-12)
+- Session patterns tracked via pattern-tracker.mjs

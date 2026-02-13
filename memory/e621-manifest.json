@@ -1,0 +1,30 @@
+{
+  "images": [
+    {
+      "filename": "e621-2026-02-12T18-18-28-834Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-12T18-18-28-834Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6186440",
+      "postUrl": "https://e621.net/posts/6186440",
+      "fetched": "2026-02-12T18:18:28.841Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-12T20-00-09-120Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-12T20-00-09-120Z.jpg",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6187340",
+      "postUrl": "https://e621.net/posts/6187340",
+      "fetched": "2026-02-12T20:00:09.131Z",
+      "shown": false
+    }
+  ]
+}

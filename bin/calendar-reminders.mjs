@@ -36,7 +36,11 @@ if (existsSync(envPath)) {
 const GOG_PASSWORD = process.env.GOG_KEYRING_PASSWORD || 'openclaw';
 const GATEWAY_URL = process.env.OPENCLAW_GATEWAY_URL || 'http://localhost:18789';
 const GATEWAY_TOKEN = process.env.OPENCLAW_GATEWAY_TOKEN || '';
-const { execSync } = require('child_process');
+import { execSync } from 'child_process';
+
+// Full paths for commands
+const GOG_CMD = '/home/pi/.local/bin/gog';
+const CURL_CMD = '/usr/bin/curl';
 
 function getTodayEvents() {
   const today = new Date();
@@ -52,7 +56,7 @@ function getTodayEvents() {
 
   try {
     const output = execSync(
-      `GOG_KEYRING_PASSWORD="${GOG_PASSWORD}" gog calendar events primary --from "${from}" --to "${to}" --json`,
+      `GOG_KEYRING_PASSWORD="${GOG_PASSWORD}" ${GOG_CMD} calendar events primary --from "${from}" --to "${to}" --json`,
       { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024, timeout: 30000 }
     );
     return JSON.parse(output);
@@ -85,7 +89,7 @@ function deleteOldReminderCrons() {
 
   try {
     const output = execSync(
-      `curl -s "${GATEWAY_URL}/api/gateway/cron" -H "Authorization: Bearer ${GATEWAY_TOKEN}"`,
+      `${CURL_CMD} -s "${GATEWAY_URL}/api/gateway/cron" -H "Authorization: Bearer ${GATEWAY_TOKEN}"`,
       { encoding: 'utf8', timeout: 5000 }
     );
 
@@ -96,7 +100,7 @@ function deleteOldReminderCrons() {
 
     for (const job of calendarReminders) {
       execSync(
-        `curl -s -X DELETE "${GATEWAY_URL}/api/gateway/cron/${job.id}" -H "Authorization: Bearer ${GATEWAY_TOKEN}"`,
+        `${CURL_CMD} -s -X DELETE "${GATEWAY_URL}/api/gateway/cron/${job.id}" -H "Authorization: Bearer ${GATEWAY_TOKEN}"`,
         { encoding: 'utf8' }
       );
       console.log(`Deleted old reminder: ${job.name}`);
@@ -144,7 +148,7 @@ function createReminderCron(event) {
 
   try {
     const response = execSync(
-      `curl -s -X POST "${GATEWAY_URL}/api/gateway/cron" -H "Authorization: Bearer ${GATEWAY_TOKEN}" -H "Content-Type: application/json" -d '${JSON.stringify(cronJob)}'`,
+      `${CURL_CMD} -s -X POST "${GATEWAY_URL}/api/gateway/cron" -H "Authorization: Bearer ${GATEWAY_TOKEN}" -H "Content-Type: application/json" -d '${JSON.stringify(cronJob)}'`,
       { encoding: 'utf8', timeout: 5000 }
     );
 
