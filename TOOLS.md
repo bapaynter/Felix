@@ -45,9 +45,12 @@ API token configured in `.openclaw-env`
 **Important:** Uses v1 API (`/api/v1/sync` endpoint with POST)
 
 ### Project IDs (v1 format)
+- **Inbox**: `6fxHWFJP3r7gF9hF`
 - **AI Tasks**: `6fxHh9H9JGJv7V65`
+- **Groceries**: `6fxJXxr5Qm5VcJwM`
 - **TV Shows Watchlist**: `6fxpQcCrqwRXCwVw`
 - **Movies Watchlist**: `6fxpQchM4gJfWHwP`
+- **watched**: `6g2HG7JxHqrQC5hf`
 
 ### Usage (via helper script)
 
@@ -405,6 +408,19 @@ All commands are JSON objects: `{"command":"<cmd>","args":[...]}`
 - Browser closes after 10 minutes of inactivity
 - Responds to SIGTERM/SIGINT for graceful shutdown
 - Each command resets the inactivity timer
+
+## Sudo Access
+
+**Pi password:** `L4767-electriclab`
+
+### Installing packages
+```bash
+echo "L4767-electriclab" | sudo -S apt update -qq && sudo -S apt install -y -qq nmap
+```
+
+Use `-S` flag to read password from stdin for automated installs.
+
+---
 
 ## Common Mistakes & Fixes
 

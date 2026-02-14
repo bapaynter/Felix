@@ -24,6 +24,19 @@
       "postId": "6187340",
       "postUrl": "https://e621.net/posts/6187340",
       "fetched": "2026-02-12T20:00:09.131Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-13T21-33-26-631Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-13T21-33-26-631Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6189923",
+      "postUrl": "https://e621.net/posts/6189923",
+      "fetched": "2026-02-13T21:33:26.651Z",
       "shown": false
     }
   ]

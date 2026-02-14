@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # e621 Search Script
 # Searches e621 for posts matching tags and returns a random result
+# Supports tag alias resolution for common misspellings/variants
 
 set -e
+
+SCRIPT_DIR="$(dirname "$0")"
+RESOLVER="$SCRIPT_DIR/resolve-tag.sh"
 
 API_KEY="${E621_API_KEY:-}"
 USER_AGENT="OpenClawBot/1.0 (by Felix)"
@@ -12,6 +16,8 @@ BASE_URL="https://e621.net/posts.json"
 TAGS=""
 RATING=""
 LIMIT=50
+RESOLVE=true
+VERBOSE=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -27,6 +33,14 @@ while [[ $# -gt 0 ]]; do
       LIMIT="$2"
       shift 2
       ;;
+    --no-resolve)
+      RESOLVE=false
+      shift
+      ;;
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
     *)
       # If no flag, assume it's tags
       if [[ -z "$TAGS" ]]; then
@@ -37,8 +51,49 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [[ -z "$TAGS" ]]; then
+  echo '{"error":"No tags provided","count":0}'
+  exit 1
+fi
+
+# Resolve tags using alias database
+resolve_tags() {
+  local input_tags="$1"
+  local resolved=""
+  local mappings=""
+
+  for tag in $input_tags; do
+    if $RESOLVE && [[ -x "$RESOLVER" ]]; then
+      canonical=$("$RESOLVER" "$tag" 2>/dev/null)
+      if [[ -n "$canonical" ]]; then
+        if $VERBOSE && [[ "$canonical" != "$tag" ]]; then
+          mappings="$mappings $tag→$canonical"
+        fi
+        resolved="$resolved $canonical"
+      else
+        resolved="$resolved $tag"
+      fi
+    else
+      resolved="$resolved $tag"
+    fi
+  done
+
+  if $VERBOSE && [[ -n "$mappings" ]]; then
+    echo "Resolved:$mappings" >&2
+  fi
+
+  echo "$resolved" | xargs
+}
+
+# Resolve input tags
+RESOLVED_TAGS=$(resolve_tags "$TAGS")
+
+if $VERBOSE; then
+  echo "Searching with tags: $RESOLVED_TAGS" >&2
+fi
+
 # Build search query
-QUERY="$TAGS"
+QUERY="$RESOLVED_TAGS"
 if [[ -n "$RATING" ]]; then
   QUERY="$QUERY rating:$RATING"
 fi

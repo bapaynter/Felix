@@ -4,7 +4,7 @@ This file defines the rotating heartbeat check system. Each heartbeat wakes the 
 
 ## How It Works
 
-1. Agent reads this file and runs: `bin/heartbeat-runner.mjs`
+1. Agent reads this file and runs: `bin/heartbeat-runner.mjs` (every hour)
 2. Runner calculates which check is most overdue (respecting time windows)
 3. Runner executes that check directly (no LLM - fast & cheap)
 4. Runner updates `memory/heartbeat-state.json`
@@ -21,10 +21,9 @@ node bin/heartbeat-runner.mjs
 
 | Check | Interval | Active Hours | Command/Action |
 |-------|----------|--------------|----------------|
-| **email** | 5 min | 9 AM - 9 PM | `gog gmail search` + auto-sort (`node bin/ai-sort-emails.mjs`) |
-| **calendar-reminders** | 1440 min | 6 AM UTC only | Setup daily reminder crons (`bin/calendar-reminders.mjs`) |
-| **todoist** | 30 min | 24/7 | v1 Sync API (`/api/v1/sync`) |
-| **git_update** | 2 hours | 24/7 | Smart sync with important change detection |
+| **todoist** | 4 hours | 24/7 | v1 Sync API (`/api/v1/sync`) |
+| **git_update** | 4 hours | 24/7 | Smart sync with important change detection |
+| **proactive-scans** | 4 hours | 24/7 | File/memory checks (`bin/heartbeat-runner.mjs` runProactiveScans) |
 | **e621-fetch** | 4 hours | 24/7 | Fetches art based on conversation topics (`bin/e621-fetch-heartbeat.mjs`) |
 
 ## Time Window Logic
@@ -35,38 +34,14 @@ node bin/heartbeat-runner.mjs
 
 ## Check Details
 
-### Email Check
-- Fetch unread emails via gog CLI
-- Alert if: urgent emails, mentions, or >5 unread
-- Use: `gog gmail search 'in:inbox is:unread' --max 10`
-- **Always run AI sorting** after fetching emails - `node bin/ai-sort-emails.mjs`
-- Sorting removes emails from INBOX and applies labels (Dev, Support, Internal, Personal, GitHub, GhostInspector)
-
-### Email Sorting (AI-Powered)
-Automatically runs after every email check:
-```bash
-node bin/ai-sort-emails.mjs
-```
-Categories:
-- **Dev** — Code reviews, CI/CD, deployments, technical infrastructure
-- **Support** — Customer tickets, Crisp, vendor support
-- **Internal** — Team comms, HR, lunch, compliance
-- **Personal** — Security, newsletters, promotions, personal notifications
-- **GitHub** — GitHub notifications, PRs, commits, issues
-- **GhostInspector** — Test results, automation alerts
-
-Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to pattern matching if no API key.
-
-### Calendar Reminders (Daily Setup)
-- Runs once daily at **6 AM UTC** (midnight your time, GMT-6)
-- Queries Google Calendar for the full day (midnight-midnight, your timezone)
-- Deduplicates events by title + start time
-- Creates reminder cron jobs for each unique event:
-  - 1 hour before event start
-  - Sends reminder directly to chat (no agent wake-up)
-- Cron jobs are isolated sessions with `delivery.mode="announce"`
-- Cleanup: Old reminder crons are removed before creating new ones
-- Script: `bin/calendar-reminders.mjs`
+### Proactive Scans
+- **Schedule:** Every 4 hours
+- **Checks:**
+  - Memory folder growth - Alert if >1MB
+  - Cron health - Verify cron scheduler is responsive
+  - Backup verification - Check last backup timestamp (alert if >24h ago)
+- **Script:** `bin/heartbeat-runner.mjs` (runProactiveScans function)
+- **Log file:** `memory/proactive-scan.log`
 
 ### Todoist Check
 - List due/overdue tasks via v1 Sync API
@@ -125,9 +100,9 @@ Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to
 - **Scripts:** `bin/heartbeat-runner.mjs` (runProactiveScans function)
 - **Log file:** `memory/proactive-scan.log`
 
-## Autonomous Health Monitoring
+## Autonomous Health Monitoring (Separate Cron Jobs)
 
-**NEW:** Health monitoring now runs autonomously via cron jobs, only waking the agent for actual problems.
+Health monitoring runs independently via cron jobs, only waking the agent for actual problems.
 
 ### Autonomous Checks (No LLM Usage)
 
@@ -138,15 +113,17 @@ Uses Gemini Flash (cheap model via OpenRouter) for categorization. Falls back to
 | **Daily Health** | 6 AM UTC | `bin/health-daily.mjs` | Repo issues, Security alerts, System summary |
 | **Alert Processor** | Every 1 min | `bin/process-health-alerts.mjs` | Converts health alerts to cron jobs |
 
+**Note:** Proactive scans (memory folder, cron health, backup status) run every 4 hours via the rotating heartbeat.
+
 ### Alert Levels
 - 🔴 **Critical** - Immediate wake-up (disk full, gateway down)
 - 🟡 **Warning** - Wake-up within 1 minute (high resources, network issues)
 - 📊 **Summary** - Daily report at 6 AM UTC
 
 ### Token Savings
-- **Before:** Agent wakes every 5-10 minutes = 144+ times/day
-- **After:** Agent wakes only on problems = ~1-2 times/day
-- **Savings:** ~98% reduction in monitoring tokens
+- Heartbeat runs every hour (24x/day)
+- With 4 checks at 4-hour intervals, only 1 check runs per heartbeat
+- Agent wakes ~6 times/day for actual checks
 
 ### Log Files
 - `memory/health-critical.log` - Critical check results
@@ -162,10 +139,11 @@ overdue_score = (now - lastRun) / intervalMinutes
 
 Highest overdue_score wins. Checks outside their active window get score = 0.
 
+With heartbeat running every hour and checks at 4-hour intervals, each check runs once per cycle (every 4 heartbeats = 4 hours).
+
 ## Actionable vs HEARTBEAT_OK
 
 **Report findings if:**
-- New emails since last check
 - Todoist tasks due within 1 day (or overdue)
 - AI work task found → ask for approval to execute
 - Proactive scan found issues
@@ -174,6 +152,7 @@ Highest overdue_score wins. Checks outside their active window get score = 0.
 - Git update — reports important changes and security updates
 
 **Return HEARTBEAT_OK if:**
-- No new emails, no due tasks
+- No due tasks
 - No AI tasks to process
+- Proactive scan passed with no issues
 - Check ran successfully but no action needed

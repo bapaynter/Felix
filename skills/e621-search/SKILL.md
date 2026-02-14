@@ -7,17 +7,24 @@ description: Search e621 furry image board for posts by tags and rating. Returns
 
 Search e621 (furry image board) for posts matching specific tags and optionally filter by rating.
 
+## Features
+
+- **Tag Alias Resolution** - Automatically resolves common misspellings, aliases, and variants to canonical e621 tags
+- **Fuzzy Matching** - Finds tags even with partial or slightly incorrect input
+- **Random Results** - Returns a random post from matching results to avoid repeats
+
 ## Prerequisites
 
 - `E621_API_KEY` environment variable set (for higher rate limits)
 - `jq` installed for JSON parsing
+- Python3 for tag resolution
 
 ## Usage
 
 ### Basic search
 
 ```bash
-# Search by tags
+# Search by tags (tags are automatically resolved)
 skills/e621-search/scripts/search.sh "red_panda male"
 
 # With explicit rating filter
@@ -27,11 +34,24 @@ skills/e621-search/scripts/search.sh --tags "red_panda male" --rating s
 skills/e621-search/scripts/search.sh "fox" --limit 100
 ```
 
+### Tag Resolution Examples
+
+The resolver automatically converts common aliases to canonical tags:
+
+```bash
+# These all resolve to the same thing:
+"vulpine"           # → fox
+"doggo"             # → domestic_dog
+"vixen"             # → fox
+"femboy"            # → femboy (exact match)
+"k9"                # → canine
+```
+
 ### Rating values
 
 - `s` - Safe
-- `q` - Questionable  
-- `e` - Explicit
+- `q` - Questionable
+- `e` - Explicit (default if not specified)
 
 ### Tag syntax
 
@@ -39,6 +59,33 @@ skills/e621-search/scripts/search.sh "fox" --limit 100
 - Use `~tag1 ~tag2` for OR search
 - Use `-tag` to exclude
 - Metatags: `rating:s`, `score:>100`, `favcount:>50`
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--tags "..."` | Tags to search |
+| `--rating s\|q\|e` | Rating filter |
+| `--limit N` | Number of results to fetch (default: 50) |
+| `--no-resolve` | Skip tag alias resolution |
+| `-v, --verbose` | Show resolved tags |
+
+## Tag Resolver Tool
+
+Use the resolver independently to check tag mappings:
+
+```bash
+# Resolve single tag
+scripts/resolve-tag.sh "vulpine"           # → fox
+scripts/resolve-tag.sh -v "doggo"          # → domestic_dog (alias match)
+
+# Show all matches for a tag
+scripts/resolve-tag.sh -a "vixen"
+# Output:
+#   === vixen ===
+#     fox (alias: vixen, posts: 441291)
+#     canine (alias: vixengirl, posts: 1498197)
+```
 
 ## Response format
 
@@ -56,13 +103,15 @@ JSON output with:
 ## Example workflow
 
 1. Parse user's tag request
-2. Call search.sh with tags and optional rating
-3. Parse JSON response
-4. Send image using `file_url` or `sample_url`
-5. Include post link and artist info in caption
+2. Resolve tags using alias database (e.g., "vulpine" → "fox")
+3. Call search.sh with resolved tags and optional rating
+4. Parse JSON response
+5. Send image using `file_url` or `sample_url`
+6. Include post link and artist info in caption
 
 ## Notes
 
 - Returns random post from results to avoid repeats
 - Respects e621 API limits (use API key for higher limits)
-- Always include proper User-Agent header
+- Tag database contains ~140K alias mappings
+- Character names (tags with parentheses) are excluded from resolution

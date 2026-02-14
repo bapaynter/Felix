@@ -125,6 +125,10 @@ async function categorizeWithAI(from, subject) {
   if (/ghostinspector/i.test(from + subject)) return 'GhostInspector';
   // Crisp/Support emails
   if (/crisp\.email|messages@pharmetika|customer support|support@crisp/i.test(from + subject)) return 'Support';
+  // BetterStack alerts → Dev
+  if (/alerts@alerts\.betterstack\.com/i.test(from)) return 'Dev';
+  // Linear notifications → Dev
+  if (/notifications@linear\.app/i.test(from)) return 'Dev';
   // Support keyword in subject
   if (/^support\b|\bsupport\b/i.test(subject) && !/@github\.com|ghostinspector/i.test(from)) return 'Support';
   // Dev emails (CI/CD, deployments, code reviews)

@@ -79,25 +79,41 @@ async function run() {
   const tags = topicsToTags(topics);
   console.log(`🏷️  Tags: ${tags}`);
   
-  // Call existing search script
+  // Call existing search script - retry until we get an image
   let result;
-  try {
-    const output = execSync(
-      `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tags}" --limit 20`,
-      { encoding: 'utf8', timeout: 30000 }
-    );
-    result = JSON.parse(output);
-  } catch (e) {
-    console.log('🔄 Trying fallback tags...');
-    const fallback = execSync(
-      '/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "furry anthro" --limit 20',
-      { encoding: 'utf8', timeout: 30000 }
-    );
-    result = JSON.parse(fallback);
+  let attempts = 0;
+  const maxAttempts = 10;
+  const searchTags = [tags, 'furry anthro', 'anthro solo', 'furry male', 'furry female'];
+  
+  while (attempts < maxAttempts) {
+    try {
+      const searchTag = searchTags[Math.min(attempts, searchTags.length - 1)];
+      console.log(`🔍 Attempt ${attempts + 1}: searching "${searchTag}"`);
+      
+      const output = execSync(
+        `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${searchTag}" --limit 50`,
+        { encoding: 'utf8', timeout: 30000 }
+      );
+      result = JSON.parse(output);
+      
+      if (result.file_url && !result.error) {
+        console.log('✅ Found image!');
+        break;
+      }
+    } catch (e) {
+      console.log(`⚠️  Attempt ${attempts + 1} failed: ${e.message}`);
+    }
+    
+    attempts++;
+    
+    if (attempts < maxAttempts) {
+      console.log('🔄 Retrying in 2 seconds...');
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
   }
   
-  if (!result.file_url || result.error) {
-    console.log('❌ No image found');
+  if (!result || !result.file_url || result.error) {
+    console.log('❌ No image found after all attempts');
     return;
   }
   
