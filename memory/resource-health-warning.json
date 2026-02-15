@@ -1,0 +1,13 @@
+{
+  "name": "Resource Health Warning",
+  "schedule": {
+    "kind": "at",
+    "at": "2026-02-15T01:31:12.456Z"
+  },
+  "payload": {
+    "kind": "systemEvent",
+    "text": "⚠️ RESOURCE HEALTH WARNING\n\n🟡 LOAD: Load average at 2.88 (threshold: 2)\n   💡 Check CPU usage trends\n\n🟡 CPU: CPU usage at 90% (threshold: 70%)\n   💡 Check for high CPU processes\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"
+  },
+  "sessionTarget": "main",
+  "enabled": true
+}

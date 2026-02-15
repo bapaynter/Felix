@@ -1,6 +1,6 @@
 
 import { cron } from 'openclaw';
-cron.add({"name":"Resource Health Warning","schedule":{"kind":"at","at":"2026-02-14T01:31:02.138Z"},"payload":{"kind":"systemEvent","text":"⚠️ RESOURCE HEALTH WARNING\n\n🟡 PROCESSES: 1 zombie process(es) detected\n   💡 Check for stuck processes\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"},"sessionTarget":"main","enabled":true}).then(() => {
+cron.add({"name":"Critical Health Alert","schedule":{"kind":"at","at":"2026-02-14T15:11:01.383Z"},"payload":{"kind":"systemEvent","text":"🚨 CRITICAL HEALTH ALERT\n\n🔴 MEMORY: Memory usage at 96% (threshold: 90%)\n   💡 Suggestion: Restart heavy processes, check for memory leaks\n\nCheck health logs: /home/pi/.openclaw/workspace/memory/health-critical.log"},"sessionTarget":"main","enabled":true}).then(() => {
     console.log('Alert cron job created successfully');
     process.exit(0);
 }).catch(err => {
