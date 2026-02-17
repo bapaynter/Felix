@@ -2,11 +2,11 @@
   "name": "Resource Health Warning",
   "schedule": {
     "kind": "at",
-    "at": "2026-02-16T01:31:13.396Z"
+    "at": "2026-02-16T18:31:02.354Z"
   },
   "payload": {
     "kind": "systemEvent",
-    "text": "⚠️ RESOURCE HEALTH WARNING\n\n🟡 LOAD: Load average at 2.76 (threshold: 2)\n   💡 Check CPU usage trends\n\n🟡 CPU: CPU usage at 89.3% (threshold: 70%)\n   💡 Check for high CPU processes\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"
+    "text": "⚠️ RESOURCE HEALTH WARNING\n\n🟡 PROCESSES: 1 zombie(s): 0 old (>24h), 1 recent\n   💡 Normal short-lived zombies\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"
   },
   "sessionTarget": "main",
   "enabled": true

@@ -112,19 +112,72 @@ async function checkResourceHealth() {
             // Tailscale might not be installed or accessible
         }
         
-        // 7. Check for zombie processes
+        // 7. Check for zombie processes with age detection and cleanup
         try {
-            const zombies = execSync('ps aux | awk \'{print $8}\' | grep -c Z', { 
-                encoding: 'utf8', 
-                timeout: 5000 
-            }).trim();
-            if (parseInt(zombies) > 0) {
-                issues.push({
-                    type: 'processes',
-                    severity: 'warning',
-                    message: `${zombies} zombie process(es) detected`,
-                    suggestion: 'Check for stuck processes'
-                });
+            // Get zombie processes with their PIDs, PPIDs, and start times
+            const zombieOutput = execSync(
+                'ps aux | grep " Z " | grep -v grep | awk \'{print $2, $3, $10, $11}\'',
+                { encoding: 'utf8', timeout: 5000 }
+            ).trim();
+            
+            if (zombieOutput) {
+                const zombies = zombieOutput.split('\n').filter(z => z.trim());
+                const now = Date.now();
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                let oldZombies = [];
+                let recentZombies = 0;
+                
+                for (const z of zombies) {
+                    const parts = z.split(/\s+/);
+                    if (parts.length >= 4) {
+                        const pid = parts[0];
+                        const ppid = parts[1];
+                        const startTime = parts[2] + ' ' + parts[3]; // "Feb16" format
+                        
+                        // Parse start time roughly (simplified)
+                        const procStart = execSync(`ps -o lstart= -p ${pid}`, { encoding: 'utf8', timeout: 3000 }).trim();
+                        const procStartMs = new Date(procStart).getTime();
+                        const ageMs = now - procStartMs;
+                        
+                        if (ageMs > oneDayMs) {
+                            oldZombies.push({ pid, ppid, age: ageMs });
+                        } else {
+                            recentZombies++;
+                        }
+                    }
+                }
+                
+                // Cleanup old zombies (>24h)
+                for (const z of oldZombies) {
+                    // Check if parent is still alive
+                    try {
+                        execSync(`kill -0 ${z.ppid} 2>/dev/null`, { timeout: 2000 });
+                        // Parent is alive - check if it's stuck (not init)
+                        if (parseInt(z.ppid) !== 1) {
+                            // Try to kill the parent to reap the zombie
+                            try {
+                                execSync(`kill ${z.ppid} 2>/dev/null`, { timeout: 2000 });
+                                console.log(`🧹 Cleaned up zombie PID ${z.pid} (parent ${z.ppid})`);
+                            } catch (e) {
+                                // Kill failed, just log it
+                                console.log(`⚠️ Could not kill parent ${z.ppid} for zombie ${z.pid}`);
+                            }
+                        }
+                    } catch (e) {
+                        // Parent is dead - zombie will be reaped by init eventually
+                        console.log(`ℹ️ Zombie PID ${z.pid} parent ${z.ppid} already dead`);
+                    }
+                }
+                
+                // Report findings
+                if (oldZombies.length > 0 || recentZombies > 0) {
+                    issues.push({
+                        type: 'processes',
+                        severity: 'warning',
+                        message: `${zombies.length} zombie(s): ${oldZombies.length} old (>24h), ${recentZombies} recent`,
+                        suggestion: oldZombies.length > 0 ? 'Attempted cleanup of old zombies' : 'Normal short-lived zombies'
+                    });
+                }
             }
         } catch (err) {
             // Ignore process check failures

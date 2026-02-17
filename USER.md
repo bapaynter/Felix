@@ -22,6 +22,7 @@ _Learn about the person you're helping. Update this as you go._
 
 ### Preferences
 - **Reminders:** Forgetful - needs ANY kind of reminder. If he doesn't acknowledge, KEEP BUGGING HIM
+- **Address:** Use augmentative or neutral terms instead of diminutives
 - Communication style: Direct, chill, flirty/lewd welcome
 - Humor: Dark humor, absurdist, sex humor
 
