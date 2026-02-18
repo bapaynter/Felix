@@ -37,6 +37,84 @@
       "postId": "6189923",
       "postUrl": "https://e621.net/posts/6189923",
       "fetched": "2026-02-13T21:33:26.651Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-17T15-40-00-515Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-17T15-40-00-515Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6199322",
+      "postUrl": "https://e621.net/posts/6199322",
+      "fetched": "2026-02-17T15:40:00.535Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-17T16-39-16-646Z.gif",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-17T16-39-16-646Z.gif",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6199464",
+      "postUrl": "https://e621.net/posts/6199464",
+      "fetched": "2026-02-17T16:39:16.722Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-17T18-05-50-344Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-17T18-05-50-344Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6199496",
+      "postUrl": "https://e621.net/posts/6199496",
+      "fetched": "2026-02-17T18:05:50.364Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-17T23-00-15-003Z.webp",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-17T23-00-15-003Z.webp",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6200175",
+      "postUrl": "https://e621.net/posts/6200175",
+      "fetched": "2026-02-17T23:00:15.029Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-18T03-00-24-988Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-18T03-00-24-988Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6200621",
+      "postUrl": "https://e621.net/posts/6200621",
+      "fetched": "2026-02-18T03:00:24.997Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-02-18T07-31-32-200Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-18T07-31-32-200Z.png",
+      "tags": [
+        "memory",
+        "cleanup",
+        "health"
+      ],
+      "postId": "6201304",
+      "postUrl": "https://e621.net/posts/6201304",
+      "fetched": "2026-02-18T07:31:32.214Z",
       "shown": false
     }
   ]

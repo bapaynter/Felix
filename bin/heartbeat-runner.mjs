@@ -4,7 +4,7 @@
  * Calculates most overdue check and runs it
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 
@@ -67,17 +67,8 @@ let findings = null;
 
 try {
     switch (mostOverdue) {
-        case 'email':
-            findings = checkEmail();
-            break;
-        case 'calendar':
-            findings = checkCalendar();
-            break;
         case 'todoist':
             findings = checkTodoist();
-            break;
-        case 'git_status':
-            findings = checkGitStatus();
             break;
         case 'git_update':
             findings = checkGitUpdate();
@@ -85,8 +76,8 @@ try {
         case 'proactive_scans':
             findings = runProactiveScans();
             break;
-        case 'calendar-reminders':
-            findings = runCalendarReminders();
+        case 'e621_fetch':
+            findings = checkE621();
             break;
         default:
             console.log(`Unknown check: ${mostOverdue}`);
@@ -111,123 +102,6 @@ try {
 }
 
 // Check implementations
-function checkEmail() {
-    try {
-        // Use gog CLI for Gmail (requires GOG_KEYRING_PASSWORD env var)
-        const output = execSync(
-            'GOG_KEYRING_PASSWORD="${GOG_KEYRING_PASSWORD:-openclaw}" gog gmail search "in:inbox is:unread" --max 10 --json 2>/dev/null || echo "{\"threads\":[]}"',
-            { cwd: WORKSPACE, encoding: 'utf8', timeout: 30000, shell: '/bin/bash' }
-        );
-        const data = JSON.parse(output);
-        const emails = data.threads || [];
-        
-        // Always run the email sorter to categorize emails
-        try {
-            const sorterOutput = execSync('node bin/ai-sort-emails.mjs', { cwd: WORKSPACE, encoding: 'utf8', timeout: 60000 });
-            console.log('📧 Email sorter:', sorterOutput.trim() || '(no changes)');
-        } catch (sortErr) {
-            console.error('Email sorting failed:', sortErr.message);
-        }
-        
-        if (emails.length === 0) {
-            // Clear alerted emails when inbox is empty
-            state.alertedEmails = [];
-            return { hasActionable: false };
-        }
-        
-        // Filter out GitHub and Ghost Inspector emails from urgent count
-        const filteredEmails = emails.filter(e => 
-            !e.from?.toLowerCase().includes('github') && 
-            !e.from?.toLowerCase().includes('ghost inspector')
-        );
-        
-        // Check for urgent keywords
-        const urgentKeywords = ['urgent', 'asap', 'blocker', 'down', 'error', 'fail'];
-        const urgent = filteredEmails.filter(e => 
-            urgentKeywords.some(k => 
-                (e.subject?.toLowerCase().includes(k) || e.from?.toLowerCase().includes(k))
-            )
-        );
-        
-        // Find new urgent emails we haven't alerted about yet
-        const newUrgent = urgent.filter(e => !state.alertedEmails?.includes(e.id));
-        
-        // If no new urgent emails, don't alert (but still return count for info)
-        if (newUrgent.length === 0) {
-            return { hasActionable: false };
-        }
-        
-        // Mark these as alerted
-        if (!state.alertedEmails) state.alertedEmails = [];
-        newUrgent.forEach(e => state.alertedEmails.push(e.id));
-        
-        let msg = `📧 ${emails.length} unread email${emails.length > 1 ? 's' : ''}`;
-        msg += ` (${newUrgent.length} new urgent)`;
-        msg += '\n' + newUrgent.slice(0, 3).map(e => `  • ${e.subject?.substring(0, 50) || '(no subject)'}`).join('\n');
-        if (newUrgent.length > 3) msg += `\n  ... and ${newUrgent.length - 3} more`;
-        
-        return { hasActionable: true, message: msg };
-    } catch (err) {
-        return { hasActionable: false };
-    }
-}
-
-function checkCalendar() {
-    try {
-        // Get events for today using gog CLI
-        const now = new Date();
-        const startOfDay = new Date(now);
-        startOfDay.setHours(0, 0, 0, 0);
-        const endOfDay = new Date(now);
-        endOfDay.setHours(23, 59, 59, 999);
-        
-        const from = startOfDay.toISOString();
-        const to = endOfDay.toISOString();
-        
-        const output = execSync(
-            `GOG_KEYRING_PASSWORD="${process.env.GOG_KEYRING_PASSWORD || 'openclaw'}" gog calendar events primary --from "${from}" --to "${to}" --json 2>/dev/null || echo '{"events":[]}'`,
-            { cwd: WORKSPACE, encoding: 'utf8', timeout: 30000, shell: '/bin/bash' }
-        );
-        const data = JSON.parse(output);
-        const events = data.events || [];
-        
-        if (!Array.isArray(events) || events.length === 0) {
-            return { hasActionable: false };
-        }
-        
-        // Check for events within 2 hours
-        const nowTime = now.getTime();
-        const twoHoursMs = 2 * 60 * 60 * 1000;
-        const soonEvents = events.filter(e => {
-            const startTime = new Date(e.start?.dateTime || e.start?.date).getTime();
-            return startTime > nowTime && (startTime - nowTime) < twoHoursMs;
-        });
-        
-        if (soonEvents.length === 0 && events.length <= 3) {
-            return { hasActionable: false }; // No urgent events, not too many total
-        }
-        
-        let msg = `🗓️ ${events.length} event${events.length > 1 ? 's' : ''} today`;
-        if (soonEvents.length > 0) {
-            msg += `\n⚠️ ${soonEvents.length} event${soonEvents.length > 1 ? 's' : ''} within 2 hours!`;
-        }
-        msg += '\n' + events.slice(0, 3).map(e => {
-            const startTime = new Date(e.start?.dateTime || e.start?.date);
-            // Convert to user's timezone (GMT-6)
-            const time = startTime.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                timeZone: 'America/Chicago' // GMT-6
-            });
-            return `  • ${time}: ${e.summary}`;
-        }).join('\n');
-        
-        return { hasActionable: true, message: msg };
-    } catch (err) {
-        return { hasActionable: false };
-    }
-}
-
 function checkTodoist() {
     try {
         const token = process.env.TODOIST_API_TOKEN;
@@ -363,12 +237,6 @@ function investigateAITask(task, allTasks) {
     }
     
     return investigation;
-}
-
-function checkGitStatus() {
-    // REMOVED: No longer needed since this is a dedicated machine
-    // Keeping the function for compatibility but it never reports
-    return { hasActionable: false };
 }
 
 function checkGitUpdate() {
@@ -620,17 +488,35 @@ function runProactiveScans() {
     return { hasActionable: true, message: `🔧 Proactive scan:\n  • ${findings.join('\n  • ')}` };
 }
 
-function runCalendarReminders() {
+function checkE621() {
     try {
-        const output = execSync('node bin/calendar-reminders.mjs', {
+        const output = execSync('node bin/e621-fetch-heartbeat.mjs', {
             cwd: WORKSPACE,
             encoding: 'utf8',
             timeout: 60000
         });
+        
         console.log(output);
+        
+        // Check if a new image was fetched (not pending approval)
+        // The script outputs "✅ Found image!" when it finds one
+        if (output.includes('✅ Found image!') && !output.includes('pending approval')) {
+            // Read the manifest to get the latest
+            const manifestPath = join(WORKSPACE, 'memory', 'e621-manifest.json');
+            const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+            const latest = manifest.images[manifest.images.length - 1];
+            
+            if (latest && !latest.shown) {
+                return {
+                    hasActionable: true,
+                    message: `🎨 Fresh e621 art!\nhttps://e621.net/posts/${latest.postId}`
+                };
+            }
+        }
+        
         return { hasActionable: false };
     } catch (err) {
-        console.error('Calendar reminders setup failed:', err.message);
+        console.error('e621 fetch failed:', err.message);
         return { hasActionable: false };
     }
 }
