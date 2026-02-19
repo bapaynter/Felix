@@ -16,6 +16,7 @@ BASE_URL="https://e621.net/posts.json"
 TAGS=""
 RATING=""
 LIMIT=50
+MIN_SCORE=0
 RESOLVE=true
 VERBOSE=false
 
@@ -31,6 +32,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --limit)
       LIMIT="$2"
+      shift 2
+      ;;
+    --min-score)
+      MIN_SCORE="$2"
       shift 2
       ;;
     --no-resolve)
@@ -97,6 +102,9 @@ QUERY="$RESOLVED_TAGS"
 if [[ -n "$RATING" ]]; then
   QUERY="$QUERY rating:$RATING"
 fi
+if [[ "$MIN_SCORE" -gt 0 ]]; then
+  QUERY="$QUERY score:>=$MIN_SCORE"
+fi
 
 # URL encode the query (basic)
 ENCODED_QUERY=$(echo "$QUERY" | sed 's/ /%20/g' | sed 's/:/%3A/g' | sed 's/+/%2B/g')
@@ -125,6 +133,7 @@ FILE_URL=$(echo "$SELECTED_POST" | jq -r '.file.url')
 PREVIEW_URL=$(echo "$SELECTED_POST" | jq -r '.preview.url')
 SAMPLE_URL=$(echo "$SELECTED_POST" | jq -r '.sample.url')
 RATING=$(echo "$SELECTED_POST" | jq -r '.rating')
+SCORE=$(echo "$SELECTED_POST" | jq -r '.score.up + .score.down')
 TAGS_GENERAL=$(echo "$SELECTED_POST" | jq -r '.tags.general | join(", ")' | cut -d',' -f1-10)
 ARTIST=$(echo "$SELECTED_POST" | jq -r '.tags.artist | join(", ")' | cut -d',' -f1-3)
 
@@ -135,6 +144,7 @@ jq -n \
   --arg preview_url "$PREVIEW_URL" \
   --arg sample_url "$SAMPLE_URL" \
   --arg rating "$RATING" \
+  --arg score "$SCORE" \
   --arg tags "$TAGS_GENERAL" \
   --arg artist "$ARTIST" \
   --argjson count "$POST_COUNT" \
@@ -144,6 +154,7 @@ jq -n \
     preview_url: $preview_url,
     sample_url: $sample_url,
     rating: $rating,
+    score: ($score | tonumber),
     tags: $tags,
     artist: $artist,
     post_url: "https://e621.net/posts/\($id)",
