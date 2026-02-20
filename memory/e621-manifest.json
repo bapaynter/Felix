@@ -201,6 +201,83 @@
       "postUrl": "https://e621.net/posts/720880",
       "fetched": "2026-02-19T09:01:05.838Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-02-19T14-00-20-580Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-19T14-00-20-580Z.jpg",
+      "tags": [
+        "memory"
+      ],
+      "postId": "3203143",
+      "postUrl": "https://e621.net/posts/3203143",
+      "fetched": "2026-02-19T14:00:20.590Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-19T18-02-27-439Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-19T18-02-27-439Z.jpg",
+      "tags": [
+        "memory"
+      ],
+      "postId": "4696845",
+      "postUrl": "https://e621.net/posts/4696845",
+      "fetched": "2026-02-19T18:02:27.448Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-19T18-11-12-929Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-19T18-11-12-929Z.png",
+      "tags": [
+        "memory"
+      ],
+      "postId": "4558900",
+      "postUrl": "https://e621.net/posts/4558900",
+      "fetched": "2026-02-19T18:11:12.953Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-19T18-12-04-207Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-19T18-12-04-207Z.png",
+      "tags": [
+        "memory"
+      ],
+      "postId": "5330956",
+      "postUrl": "https://e621.net/posts/5330956",
+      "fetched": "2026-02-19T18:12:04.215Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-19T22-02-42-132Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-19T22-02-42-132Z.png",
+      "tags": [
+        "memory"
+      ],
+      "postId": "5330956",
+      "postUrl": "https://e621.net/posts/5330956",
+      "fetched": "2026-02-19T22:02:42.139Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-20T02-32-31-413Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-20T02-32-31-413Z.jpg",
+      "tags": [
+        "memory"
+      ],
+      "postId": "5160477",
+      "postUrl": "https://e621.net/posts/5160477",
+      "fetched": "2026-02-20T02:32:31.467Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-20T08-00-08-714Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-20T08-00-08-714Z.png",
+      "tags": [
+        "memory"
+      ],
+      "postId": "720880",
+      "postUrl": "https://e621.net/posts/720880",
+      "fetched": "2026-02-20T08:00:08.732Z",
+      "shown": false
     }
   ]
 }

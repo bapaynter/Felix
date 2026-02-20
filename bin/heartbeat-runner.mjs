@@ -92,6 +92,13 @@ try {
     if (findings && findings.hasActionable) {
         console.log(`\n🔔 ${check.description}`);
         console.log(findings.message);
+        // If there's a file to send, output the path for the agent
+        if (findings.file) {
+            console.log(`__FILE__:${findings.file}`);
+        }
+        if (findings.caption) {
+            console.log(`__CAPTION__:${findings.caption}`);
+        }
     } else {
         console.log('HEARTBEAT_OK');
     }
@@ -462,13 +469,13 @@ function runProactiveScans() {
     ];
     for (const backup of backupLogs) {
         try {
-            const lastLine = execSync(`tail -1 ${backup.file} 2>/dev/null`, { encoding: 'utf8' });
-            // Check if backup was in last 24 hours - look for any date-like pattern
-            const timestamp = lastLine.match(/(\d{4}-\d{2}-\d{2})/);
-            if (timestamp) {
-                // Try to parse as date (add time 00:00:00 if not present)
-                const dateStr = timestamp[1].length === 10 ? timestamp[1] + 'T00:00:00Z' : timestamp[1];
-                const backupTime = new Date(dateStr);
+            // Search for any ISO timestamp in the file (not just last line)
+            const content = execSync(`cat ${backup.file} 2>/dev/null`, { encoding: 'utf8' });
+            const timestamps = content.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) || [];
+            if (timestamps.length > 0) {
+                // Use the most recent timestamp
+                const lastTimestamp = timestamps[timestamps.length - 1];
+                const backupTime = new Date(lastTimestamp);
                 const hoursAgo = (now - backupTime) / (1000 * 60 * 60);
                 if (hoursAgo > 24) {
                     findings.push(`⚠️ ${backup.name} backup > 24h ago`);
@@ -506,11 +513,27 @@ function checkE621() {
             const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
             const latest = manifest.images[manifest.images.length - 1];
             
+            // Check for file path in output
+            const fileMatch = output.match(/^file:(.+)$/m);
+            const urlMatch = output.match(/^url:(.+)$/m);
+            const filePath = fileMatch ? fileMatch[1].trim() : null;
+            const postUrl = urlMatch ? urlMatch[1].trim() : `https://e621.net/posts/${latest.postId}`;
+            
             if (latest && !latest.shown) {
-                return {
-                    hasActionable: true,
-                    message: `🎨 Fresh e621 art!\nhttps://e621.net/posts/${latest.postId}`
-                };
+                // Prefer sending the actual file if it exists
+                if (filePath && existsSync(filePath)) {
+                    return {
+                        hasActionable: true,
+                        message: `🎨 Fresh e621 art!`,
+                        file: filePath,
+                        caption: postUrl
+                    };
+                } else {
+                    return {
+                        hasActionable: true,
+                        message: `🎨 Fresh e621 art!\n${postUrl}`
+                    };
+                }
             }
         }
         

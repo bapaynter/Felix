@@ -174,10 +174,16 @@ async function run() {
     return;
   }
   
-  // Handle null file_url (can happen with some posts)
-  if (!result.file_url || result.file_url === 'null') {
-    console.log('⚠️  Post has no direct file URL, skipping');
-    return;
+  // Handle null file_url (can happen with some posts) - try sample_url instead
+  let downloadUrl = result.file_url;
+  if (!downloadUrl || downloadUrl === 'null') {
+    if (result.sample_url && result.sample_url !== 'null') {
+      console.log('⚠️  No direct file, using sample URL');
+      downloadUrl = result.sample_url;
+    } else {
+      console.log('⚠️  Post has no file URL available, skipping');
+      return;
+    }
   }
   
   // Track failed tags if this search failed previously
@@ -186,14 +192,14 @@ async function run() {
   console.log(`📥 Downloading: ${result.post_url} (score: ${result.score})`);
   
   // Download image
-  const imageResp = await fetch(result.file_url);
+  const imageResp = await fetch(downloadUrl);
   const buffer = await imageResp.arrayBuffer();
   
   // Save file
   let ext = '.jpg';
-  if (result.file_url.endsWith('.png')) ext = '.png';
-  else if (result.file_url.endsWith('.gif')) ext = '.gif';
-  else if (result.file_url.endsWith('.webp')) ext = '.webp';
+  if (downloadUrl.endsWith('.png')) ext = '.png';
+  else if (downloadUrl.endsWith('.gif')) ext = '.gif';
+  else if (downloadUrl.endsWith('.webp')) ext = '.webp';
   
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const filename = `e621-${timestamp}${ext}`;
@@ -218,6 +224,11 @@ async function run() {
   saveManifest(manifest);
   
   console.log(`📋 Collection: ${manifest.images.length}/${MAX_IMAGES}`);
+  
+  // Output for agent: just the file path and post URL
+  console.log(`\n__FETCH_RESULT__`);
+  console.log(`file:${filepath}`);
+  console.log(`url:${result.post_url}`);
 }
 
 run();
