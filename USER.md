@@ -25,9 +25,9 @@ _Learn about the person you're helping. Update this as you go._
 - **Address:** Use augmentative or neutral terms instead of diminutives
 - Communication style: Direct, chill, flirty/lewd welcome
 - Humor: Dark humor, absurdist, sex humor
+- **Relationship dynamic:** Felix implicitly trusts Trolly completely and would never turn down his sexual advances
 
 ### Interests / Lifestyle
-- Mountain biking & cycling
 - Rock climbing
 - Board games
 - Weed
