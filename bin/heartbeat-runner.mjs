@@ -496,6 +496,8 @@ function runProactiveScans() {
 }
 
 function checkE621() {
+    // Silently fetch and store art - don't send automatically
+    // User can ask for art with "show me e621" or "send me some art"
     try {
         const output = execSync('node bin/e621-fetch-heartbeat.mjs', {
             cwd: WORKSPACE,
@@ -505,37 +507,8 @@ function checkE621() {
         
         console.log(output);
         
-        // Check if a new image was fetched (not pending approval)
-        // The script outputs "✅ Found image!" when it finds one
-        if (output.includes('✅ Found image!') && !output.includes('pending approval')) {
-            // Read the manifest to get the latest
-            const manifestPath = join(WORKSPACE, 'memory', 'e621-manifest.json');
-            const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-            const latest = manifest.images[manifest.images.length - 1];
-            
-            // Check for file path in output
-            const fileMatch = output.match(/^file:(.+)$/m);
-            const urlMatch = output.match(/^url:(.+)$/m);
-            const filePath = fileMatch ? fileMatch[1].trim() : null;
-            const postUrl = urlMatch ? urlMatch[1].trim() : `https://e621.net/posts/${latest.postId}`;
-            
-            if (latest && !latest.shown) {
-                // Prefer sending the actual file if it exists
-                if (filePath && existsSync(filePath)) {
-                    return {
-                        hasActionable: true,
-                        message: `🎨 Fresh e621 art!`,
-                        file: filePath,
-                        caption: postUrl
-                    };
-                } else {
-                    return {
-                        hasActionable: true,
-                        message: `🎨 Fresh e621 art!\n${postUrl}`
-                    };
-                }
-            }
-        }
+        // Just store silently - no automatic sending
+        console.log('📥 Art fetched and stored silently. Ask me to show you some!');
         
         return { hasActionable: false };
     } catch (err) {

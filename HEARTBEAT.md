@@ -78,14 +78,16 @@ node bin/heartbeat-runner.mjs
 - **Optimized:** Direct pull (no stash complexity), parallel fetch planned
 - **Alerts on:** Important changes, security updates, repo health issues
 
-### e621 Art Fetcher
+### e621 Art Fetcher (Silent Mode)
+- **Behavior:** Fetches and stores art silently — does NOT send automatically
 - **Uses existing skill:** `skills/e621-search/scripts/search.sh`
-- **Fetches based on:** Top 3 topics from `memory/patterns.json`
+- **Fetches based on:** Top topics from `memory/patterns.json`
 - **Tag mapping:** Converts topics to e621 tags (e.g., "mountain biking" → `mountain_biking`)
 - **Fallback:** If no topic matches, uses `furry anthro`
 - **Storage:** `images/e621/` directory
 - **Tracking:** `memory/e621-manifest.json` (shown/unshown status)
 - **Max images:** 100 (auto-deletes oldest)
+- **How to get art:** Ask me "show me e621", "send me some art", or "show me furry art"
 - **Commands:**
   - `node bin/e621-fetch-heartbeat.mjs` - Manual fetch
   - `node bin/show-art.mjs` - View collection
