@@ -149,7 +149,7 @@ async function run() {
     
     try {
       const output = execSync(
-        `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tag}" --limit 50 --min-score ${MIN_SCORE}`,
+        `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tag}" --limit 50 --min-score ${MIN_SCORE} --order hot`,
         { encoding: 'utf8', timeout: 30000 }
       );
       result = JSON.parse(output);

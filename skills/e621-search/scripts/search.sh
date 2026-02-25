@@ -17,6 +17,7 @@ TAGS=""
 RATING=""
 LIMIT=50
 MIN_SCORE=0
+ORDER="hot"
 RESOLVE=true
 VERBOSE=false
 
@@ -36,6 +37,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --min-score)
       MIN_SCORE="$2"
+      shift 2
+      ;;
+    --order)
+      ORDER="$2"
       shift 2
       ;;
     --no-resolve)
@@ -104,6 +109,9 @@ if [[ -n "$RATING" ]]; then
 fi
 if [[ "$MIN_SCORE" -gt 0 ]]; then
   QUERY="$QUERY score:>=$MIN_SCORE"
+fi
+if [[ -n "$ORDER" ]]; then
+  QUERY="$QUERY order:$ORDER"
 fi
 
 # URL encode the query (basic)
