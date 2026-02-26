@@ -1,7 +1,7 @@
 {
-  "need": 76.85360387246938,
+  "need": 126.39740509944949,
   "threshold": 100,
-  "lastUpdate": "2026-02-25T08:01:31.835Z",
-  "lastRequestTime": null,
+  "lastUpdate": "2026-02-26T08:00:28.547Z",
+  "lastRequestTime": "2026-02-25T22:03:26.509Z",
   "requestCooldownHours": 12
 }

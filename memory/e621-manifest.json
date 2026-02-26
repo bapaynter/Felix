@@ -553,6 +553,28 @@
       "postUrl": "https://e621.net/posts/6214950",
       "fetched": "2026-02-25T09:00:12.053Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-02-25T13-01-57-347Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-25T13-01-57-347Z.png",
+      "tags": [
+        "health"
+      ],
+      "postId": "6214761",
+      "postUrl": "https://e621.net/posts/6214761",
+      "fetched": "2026-02-25T13:01:57.363Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-25T17-56-47-143Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-25T17-56-47-143Z.png",
+      "tags": [
+        "health"
+      ],
+      "postId": "6214761",
+      "postUrl": "https://e621.net/posts/6214761",
+      "fetched": "2026-02-25T17:56:47.161Z",
+      "shown": false
     }
   ]
 }
