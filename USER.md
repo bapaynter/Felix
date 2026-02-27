@@ -7,6 +7,7 @@ _Learn about the person you're helping. Update this as you go._
 - **Pronouns:** he/him
 - **Timezone:** GMT-6
 - **Notes:**
+- Location for weather: Madison, WI
 
 ## Context
 

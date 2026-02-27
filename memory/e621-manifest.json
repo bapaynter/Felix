@@ -575,6 +575,39 @@
       "postUrl": "https://e621.net/posts/6214761",
       "fetched": "2026-02-25T17:56:47.161Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-02-26T23-17-06-514Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-26T23-17-06-514Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6220469",
+      "postUrl": "https://e621.net/posts/6220469",
+      "fetched": "2026-02-26T23:17:06.545Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-27T03-18-15-997Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-27T03-18-15-997Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6219152",
+      "postUrl": "https://e621.net/posts/6219152",
+      "fetched": "2026-02-27T03:18:16.007Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-27T07-18-17-055Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-27T07-18-17-055Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6219152",
+      "postUrl": "https://e621.net/posts/6219152",
+      "fetched": "2026-02-27T07:18:17.064Z",
+      "shown": false
     }
   ]
 }
