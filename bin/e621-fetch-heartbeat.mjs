@@ -16,6 +16,19 @@ const IMAGES_DIR = '/home/pi/.openclaw/workspace/images/e621';
 const MAX_IMAGES = 100;
 const MIN_SCORE = 100; // Only fetch images with score >= 100
 
+// Tags to NEVER fetch (blacklist)
+const BLACKLIST = [
+  'gore',
+  'scatplay',
+  'obese',
+  'parasite',
+  'infestation',
+  'insectophilia',
+  'necrophilia',
+  'cock_vore',
+  'ear_penetration'
+];
+
 const TOPIC_TAG_MAP = {
   'mountain biking': 'mountain_biking',
   'climbing': 'climbing',
@@ -132,8 +145,9 @@ async function run() {
   console.log(`🚫 Failed tags: ${Array.from(failedTags).join(', ') || 'none'}`);
   
   // Build smart tag list: valid recent topics first, then fallbacks
+  // Also filter out blacklisted tags
   const tagCandidates = [
-    ...recentTopics.map(topicToTag).filter(t => !failedTags.has(t)),
+    ...recentTopics.map(topicToTag).filter(t => !failedTags.has(t) && !BLACKLIST.includes(t)),
     'red_panda',
     'furry'
   ].filter((v, i, a) => a.indexOf(v) === i); // dedupe

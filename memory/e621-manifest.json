@@ -608,6 +608,72 @@
       "postUrl": "https://e621.net/posts/6219152",
       "fetched": "2026-02-27T07:18:17.064Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-02-27T11-33-10-735Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-27T11-33-10-735Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6219152",
+      "postUrl": "https://e621.net/posts/6219152",
+      "fetched": "2026-02-27T11:33:10.744Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-27T15-53-21-405Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-27T15-53-21-405Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6219152",
+      "postUrl": "https://e621.net/posts/6219152",
+      "fetched": "2026-02-27T15:53:21.419Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-27T20-00-36-385Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-27T20-00-36-385Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6220469",
+      "postUrl": "https://e621.net/posts/6220469",
+      "fetched": "2026-02-27T20:00:36.418Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-28T00-03-28-269Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-28T00-03-28-269Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6220469",
+      "postUrl": "https://e621.net/posts/6220469",
+      "fetched": "2026-02-28T00:03:28.620Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-28T04-05-01-973Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-28T04-05-01-973Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6220592",
+      "postUrl": "https://e621.net/posts/6220592",
+      "fetched": "2026-02-28T04:05:01.983Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-28T08-06-30-886Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-28T08-06-30-886Z.png",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6221020",
+      "postUrl": "https://e621.net/posts/6221020",
+      "fetched": "2026-02-28T08:06:30.923Z",
+      "shown": false
     }
   ]
 }
