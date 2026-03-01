@@ -674,6 +674,61 @@
       "postUrl": "https://e621.net/posts/6221020",
       "fetched": "2026-02-28T08:06:30.923Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-02-28T12-32-55-343Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-28T12-32-55-343Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6225016",
+      "postUrl": "https://e621.net/posts/6225016",
+      "fetched": "2026-02-28T12:32:55.368Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-02-28T16-34-32-285Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-02-28T16-34-32-285Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6225016",
+      "postUrl": "https://e621.net/posts/6225016",
+      "fetched": "2026-02-28T16:34:32.303Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-01T00-40-42-295Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-01T00-40-42-295Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6225016",
+      "postUrl": "https://e621.net/posts/6225016",
+      "fetched": "2026-03-01T00:40:42.313Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-01T05-00-35-172Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-01T05-00-35-172Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6224010",
+      "postUrl": "https://e621.net/posts/6224010",
+      "fetched": "2026-03-01T05:00:35.195Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-01T09-01-37-302Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-01T09-01-37-302Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6224010",
+      "postUrl": "https://e621.net/posts/6224010",
+      "fetched": "2026-03-01T09:01:37.328Z",
+      "shown": false
     }
   ]
 }

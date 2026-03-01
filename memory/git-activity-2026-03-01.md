@@ -1,0 +1,172 @@
+# Git Activity - 2026-03-01
+
+## pmk
+- c8241f943 Merge pull request #2689 from Pharmetika/production_20260112
+- e5472a307 Apply suggestions from code review
+- cecf5778e Merge pull request #2694 from Pharmetika/dependabot/npm_and_yarn/doc/electric_lab/worksheet_pfd_generator/minimatch-3.1.5
+- bdaf80d0b build(deps): bump minimatch in /doc/electric_lab/worksheet_pfd_generator
+- 3bd16dffb config centrifugo
+- 64f571e44 Merge branch 'feature/TH-branding_20260221' into production_20260112
+- c227b1b7c noissue
+- adec15ac5 fix: missed naming column
+- 6a14ce795 Merge pull request #2681 from Pharmetika/feature/partner-utility_api
+- 162f3633d Merge pull request #2685 from Pharmetika/feature/partner-webhook
+- 80fefa104 fix: syntax issues
+- 00951588a fix: remove r in regex
+- d9bef54ca Merge pull request #2677 from Pharmetika/feature/delayed_pharmacist_verification
+- a49cc99f9 fix: regex, return HTTP response vs return
+- 4e087344c fix: syntax and bugs
+- 9bf58d341 add: webhook support for partner platorm
+- 8680f854c Merge pull request #2684 from Pharmetika/fix/global_org_pricing_for_patient_setting_0112
+- 41914c2f6 Merge pull request #2680 from Pharmetika/feature/partner_order_to_PE
+- 23e5f8207 add: alternate testing file
+- 2818cd53e fix: all Platform APIs should operate as a predefined user, though an acting_user could be set
+- 6246f3e27 config: sandbox1 system pharmetika, default issuer
+- bb73b84a7 config: vmc2 default issuer, system pharmetika
+- 78c475173 config: sandbox1
+- 64473384c config: vmc-vmc2 transfer
+- e2b3a812d config: vmc2 signalwire
+- ce4e9e0ad config: vmc2
+- 8fc174f4a config: reshape transfers to/from chicago
+- 6ce28bd3b config: reshapechi system pharmetika, default issuer
+- 8b6aab0bb config: reshapechi signalwire
+- f5b17956f config: reshapechi
+- 8674fe55e config: nies system pharmetika, default issuer
+- dfb5d0dfc config: nies signalwire
+- 397feee2c config: nies
+- 87e5dd68d fix again?
+- 243b4bb0b fix errors
+- d046137a6 add: missing partner platform plugin
+- 0ca8bb225 fix: add create address endpoint
+- 9be7fe4d3 fix: use phone_primary
+- 6235f91f0 fix: EL usage report should only count > 0 entries
+- 97ab6f454 add: route to create_order
+- 265aafce2 fix: electronic prescription list gets used in PE screen
+- 5341b94e7 fix: product from formula would pull wrong data when another item with same NDC existed
+- 7c03669da debug
+- c321c9dfe config
+- 2be188739 fix: e164 support for Twilio
+- 4a97d564c fix: syntax issues
+- 5654dbc17 config: purehtx shipengine
+- 9c6cf4c6f fix: we can just use the same logic for the org level setting as the global one, so move that check; fix: treat patient pay org identifier as we would an args organization_identifier; improve: order orgs by latest and dont get archived ones when determining org for patient pay org price
+- 934fa8114 missing commit
+- 8db393797 add: set correct organization data from brand
+- 1f9f40b00 Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- f0891a450 add: partner portal, service pmkjs
+- 7502a73ef add address API
+- ba3771ddb config: obrien updated their shipengine
+- 57c3f85e7 add: nginx conf for service_pmkjs
+- f67773bfc add: hardcoded alias for service pmkjs
+- e241e9e67 config: central fill for resahpe
+- 3ebe41d09 WIP: brand -> organization
+- 78ec33b72 remove
+- 32b2b725c Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- 68e793ebb fix: large numbers could get converted to 1.6e14
+- 7d3829cad fix: syntax and other small issues
+- 5e074efbc add endpoints to create/update patient/prescriber for nexus API
+- 7c9f9ef02 add: test for platform order
+- 7955fc86a add: jsonc util
+- 4bcd87c2d Merge pull request #2682 from Pharmetika/feature/partner_order_to_PE
+- 155d6181d fix: performance isseu on anticipatory calc
+- afb47f8af add: medication order endpoint
+- e71603f46 add: medication order endpoint
+- 51dcc3a5e add: partner internal utility APIs
+- 5a7888b16 add: config for nexus bucket
+- 2513c2ede add: support for observations, medication-level note, clinic name
+- ae6aab1e2 config: spuk
+- 899dfe6ed WIP
+- aca5d1986 add: map partner order to SCRIPT
+- d6d8234a3 WIP: Partner Order mapping to PE
+- f426668ea WIP: Partner Order mapping to PE
+- 09c685744 config: obrien logo
+- 03285502e config: obrien shipengine key
+- f3e55b967 fix: strip special characters from boolean mode MATCH AGAINST from user input
+- 9a73d6de6 add: route to record verification (PV1 at PV2)
+- 7ef1875a8 add: support for delayed_pharmacist_verification
+- 88bcc7485 improve openapi spec
+- c52539de4 fix: missing headers
+- f3ae6cc70 add missing headers for report
+- af4ceaf75 fix: everyone internal should be auth level 9 not 4
+- b1ecc850f add: update auth level on user creation
+- cb836d69b noissue: remove old users
+- 8e1a4cddc sync openapi yaml with pmk_js
+- 0c3dac02c add: use handoff mehtod-level pricing
+- f45aa0bbd add: allow clinic staff accounts to create users
+- 5cb69a9d2 generate docs based on openapi yml
+- 85c802f04 fix openapi schema
+- 65d4b7fe4 change species to canine
+- 784d55326 lint
+- 63cddcace Merge branch 'feature/TH-branding' of github.com:Pharmetika/pmk into feature/TH-branding
+- d7c5504aa add: notes for mapping a platform order to PE
+- 94192977d add: species & animal owner name
+- f5795886b Merge pull request #2667 from Pharmetika/fix/redis_for_test_env
+- a4db7194a rollback misconfiguration rvp
+- 7415774ff config: testreshape default issuer, system pharmetika
+- d8372c19a fix: quote sql realm type
+- 8d3179421 Merge pull request #2668 from Pharmetika/config/testreshape
+- 9c090a965 config: testreshape
+- 2230ecce8 config: testreshape
+- 239281f36 config: testreshape
+- 85aee9d28 rollback misconfiguration
+- 109f13eb2 switch pmk-test8 to sanbox redis
+- 6d5958ac7 config: reshapeatl shipengine
+- 05ccfe8b6 noissue: revert
+- 6875b707b noissue: remove useless semicolon
+- f0464670a fix: respect realm type when inserting into pmk.realms instead of always setting it to production
+- 4cb5c0805 config: testpharmacyhub2 default issuer, system pharmetika
+- 1150afba8 Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- 2f8f5d153 config: testpharmacyhub2
+- 6f2889a23 cleanup
+- 0a3eeb1a7 Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- a581a473e fix: conversion - skip bad RTF text
+- e7a0fbd71 fix: add new realms to the deployment table on creation - else we can't serve them from CF
+- 54b3a6aa7 config: reshape transfer support
+- 47aa79af0 add: DEA number and NCPDP id to pharmacy info admin utility
+- adfe6c076 fix: bounces need to normalize email with extract_email_address
+- 0566adb56 config: purehtx logo
+- 9443745fe config: purehtx epx
+- b56348ea0 noissue
+- 029b859be noissue: update all internal rph users to auth level 9
+- 7677cf574 config: disable speedscript crons
+- 179902932 config: reshapeatl epx
+- d9c2aa52b config: reshapesat epx
+- c99392717 add logo to qa0 so it stops pinging me in in monitoring
+- 8efc0bf4a Merge pull request #2655 from Pharmetika/hotfix/use-config-currency-for-transaction-alternate-reciept
+- 4542e3939 fix: forgot to wrap require_2FA in NOT to invert
+- 943351c63 fix: === is not an operator in perl. checking a bool with a ternary to make it into an integer is also not necessary here
+- 31343d0c9 WIP: Nexus - modify order schema
+- 2fd2e7f59 add: option for _max_days_override in PE report
+- 6d1cb54b3 add: include allergies and condition list in patient report
+- 1012339d5 Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- d723fd293 WIP: Nexus
+- 5a822a0b5 WIP: Nexus - define payloads, identify patient across realms
+- ec71819b1 WIP: define payloads
+- fb9690561 config: rxlab default issuer, system pharmetika
+- 8042a0fda Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- 0cefed5b1 add: exempt regions from EPCS requirements
+- 37381880a fix: pmk_document_get provider portal exception
+- 6c2fb2ef6 Merge pull request #2659 from Pharmetika/fix/authorizenet_lwp_to_mojo_ua
+- 676ddaf83 fix: move authorizenet from lwp useragent to mojo useragent due to obscure error - hostname verification failed with LWP
+- a6818f99d Merge branch 'production_20260112' of github.com:Pharmetika/pmk into production_20260112
+- 97f00519e config: artofmed notifiaction message text
+- 9daee47d7 config: vyv signalwire
+- 3be35e4a7 config: obrien system pharmetika
+- 3d2c43ce5 add: check is internal flag for same users other realm SQL
+- f1a6f3e13 add exception to add_patient_addreses
+- f092299c6 fix: add correct class to original document column for fill report
+- b07a760ed config: realm default issuer obrien
+- 8e9b1b9f2 config: obrien signalwire
+- ac58b06c6 config: obrien
+- aa51e0904 fix: make include_original_document work again
+- 322b79b79 fix: bad sql statement
+- 5b9764ce8 fix: use prefix_html instead of raw symbol to avoid weird char issue
+- 33040348c fix: use configured currency for payment reciept (transaction_alternate)
+- 7e919b09a fix: remove duplicate exception
+- 860a0545d Merge pull request #2651 from Pharmetika/fix/add_sms_contact_logging_for_other_carriers
+- 521f3a52b Merge pull request #2652 from Pharmetika/hotfix/usage_based_reordering
+- ccdd40892 Merge pull request #2653 from Pharmetika/production_20251226
+- 277465cb5 Update reorder point with fixed value if set to fixed
+- 3137378c5 Add patient contact logging for signalwire SMSs
+- c042ca3f9 WIP
+
+
