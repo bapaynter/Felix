@@ -170,3 +170,248 @@
 - c042ca3f9 WIP
 
 
+# Git Activity - 2026-03-01
+
+## pmk
+- ca9767705 Merge pull request #2697 from Pharmetika/production_20260222
+- 47a8585dc fix: audit log did not record user
+- e33ce5975 Merge pull request #2696 from Pharmetika/production_20260222
+- 55aeb25c7 fix: success was incorrectly determined
+- 305375924 whitespace
+- 02c6194e5 fix: return proper success
+- ff81f7e8d fix: bad date_order_needed_by timestamps
+- 687fc5d74 whitespace
+- f2fb731b2 whitespace
+- 934f4f14f fix: claim is not scoped to realm_id
+- 5cfe120ad cofig: reset timeouts to default
+- 9ab7da175 fix: modifying lot ref inside loop, clone and modify instead
+- 9501b248b fix: wrong IP in  GRANTs
+- fe07fa0fe fix: missing brand in SCRIPT entry
+- 21c2ed0d0 fix: syntax issues
+- ad2f9ecd8 fix: always set to rejected
+- 59e7cb623 add: internal util for claim reversal
+- 1a77a3096 config: pharmacyhub2 shipengine
+- 8f8e511b6 config: sknv new logo
+- ce82ad87a config: reshapesat, chi logo; config: atl was using a duplicate of reshape's logo, so remove and replace
+- 104daa352 config: rxlab signalwire
+- 0cf8aea50 fix: pass patient and prescriber id so we support patient pay org price in rx history
+- f68f08b8c fix: up shipengine timeout
+- d3778f975 add: support for creating sales admin users
+- 9d52d4a59 add: util script to create a sales dashboard user
+- e8a2d929e add: support date_left_pharmacy in unbilled transactions report
+- c35092778 add: minion job for process_event_for_partner_webhook
+- ffdcdacfb fix: add missing rule helper that shipments calls to UK ruleset
+- 403d11467 fix: wrong table in db
+- 715096027 fix: missing comma and wrong method for endpoint
+- 9fa242ec5 fix: merge issue
+- 82c17c828 fix: merge issue
+- 31889623d fix: controlled substances from conversion did not appear in on hand report
+- d48ca8228 fix: migration not applied to UK rules
+- 47f114ec9 fix: checking wrong ruleset code path
+- 631ca4461 fix: export UK pe rule functions
+- b0f087132 config: rxlab logo
+- 641d81963 Merge branch 'production_20260222' of github.com:Pharmetika/pmk into production_20260222
+- 5824123cf fix: API created wrong type of minion job
+- 650b19702 add: user list template
+- 9e98f95ae send pmkjs requests via socketfile
+- 9a04b5d3e fix: admin util to import el inventory did not support shared formulary
+- 2d468c4aa add: logic to handle getting a realm_role for electric_lab realm_roles; add: ability to get realm_roles for a realm other than the one calling the request (for internal utility usage)
+- 8bfb8ed21 Merge pull request #2679 from Pharmetika/fix/circular_reference_protection
+- 1160abbc4 improve: enable serving the hardcoded aliases from all bases (these should probably be in with the aliases object if we expand this functionality)
+- d49e42cc7 improve: force link id to an int value
+- a5a0c0140 Merge branch 'production_20260222' of github.com:Pharmetika/pmk into production_20260222
+- 20f70cb1d fix: syntax and bugs
+- 5f46e80dc fix: column name is realm_id, not realm
+- 84ffcc0ce Merge pull request #2692 from Pharmetika/hotfix/verified_by_for_techs
+- f9717f492 ensure date verified and verified by are recorded when technicians verify dispenses
+- e5a15198a Merge branch 'production_20260222' of github.com:Pharmetika/pmk into production_20260222
+- 2279b9a6f add: PE - set destination_state
+- d52647ee6 Merge pull request #2691 from Pharmetika/feature/ssapi_insurance_billing
+- c178d8e12 improve: return a response to the partner with data they actually care about (rx numbers, pmk ids)
+- 50fbea422 fix: properly populate fields for entry order items from submitted entry
+- 4f3c23e3d fix: drug_description needs to also be product.description
+- 3aa096fd1 Merge branch 'production_20260222' of github.com:Pharmetika/pmk into production_20260222
+- b2ad97465 fix: deprecate drug_description field
+- b3b7b1092 fix: support for deprecated drug_description field
+- 6e5296554 add: logic to make an order from a partner portal request
+- 105f35073 fix: test needs auth + IP
+- bd01c3de8 fix: test needs auth
+- 5d5e8101f fix: syntax and bugs
+- 2b0702fe0 fix: pe.partner_identifier_bin is currently broken, add workaround
+- 4d1dafda5 documentation
+- 6551c1788 Merge branch 'production_20260222' of github.com:Pharmetika/pmk into production_20260222
+- 8370dfa3a fix: various bugs for webhooks (partner platform)
+- 29606946c add: make order test use endpoint
+- 861d0e367 improve: trim other string text fields
+- cb9a02f58 add: set actual pharmacy info on brand label under fulfillment pharmacy
+- 56439f6ae add: support for rendering brand label on time of fill if setting enabled
+- 464a9175c Merge pull request #2690 from Pharmetika/production_20260112
+- c5ac53453 add: include partner/brand in tx details
+- b66c93e5a fix: binuuid function did not return when NULL
+- 8b397484f fix: use profile to get partner_identifier
+- 3281fa0b9 fix: identifier also should be stored in prescription_data to get into the prescription_data table
+- 4bff8d88f fix: not properly setting and retrieving brand and partner identifier for medication order
+- d0488f088 improve: limit org from brand identifier lookup to getting ones we can read and are not archived
+- e7badfc03 add: logic to support retrieving a brand org's price plan
+- e5f7a1049 fix: prescription_entry_reload updates
+- 9896e26cc deprecate: bill_to/selected_bill_to -> payment_party
+- 0d35d1d99 add: support for delay_verification_until_fill on platform order; fixes
+- 6a57fcaa3 migration: PE missing columns
+- 5286a1b2d fix: syntax issues
+- 2f4f26280 fix: syntax issues
+- 5d77353c0 Merge branch 'feature/TH-branding_20260221' of github.com:Pharmetika/pmk into feature/TH-branding_20260221
+- 628ff960b add: include additional default options for brand organizations
+- 925cde288 add: SQL snippet to set realm_config options
+- 046837f9d fix: app realm_config
+- 4c3fd24ed Merge branch 'feature/TH-branding_20260221' of github.com:Pharmetika/pmk into feature/TH-branding_20260221
+- 922259c7c add: record SCRIPT messages for platform orders
+- 17da19003 fix: use product description instead of medication name
+- 79e6c4c11 add: migration script to update entries that have been modified since migrated
+- 12685f380 fix: nix medication_order and check both platform_order and pharmacy_entities
+- 96770c331 noissue: update test payload
+- 34b16f89b improve: this should be type error
+- bf379d446 Merge branch 'feature/TH-branding_20260221' of github.com:Pharmetika/pmk into feature/TH-branding_20260221
+- f4ac3cf16 noissue
+- 8456e6cdf noissue
+- 522792a1a fix: missing comma
+- ff8260efb fix: test used fake brand
+- 332198185 Freshen
+- ecf47465d fix: int type to string with leading zeroes
+- b03e712ec fix: revert change, causing claim problems?
+- 1d6600754 fix: use existing claim_date since we start to send it in the payload originally now
+- e5c341918 config: rvcrx system pharmetika
+- b0819e9b4 die instead
+- 9de57eea9 fix: track visited ings when finding all ings in formula, prevent recursive loop and alert
+- 0ae28f4db noissue: log
+- 0925b3d39 fix: diagnoses will always have 1 entry, but it's code will be null
+- bc5ed8824 fix: don't send actual NDC of compound
+- 89c99c99f fix: use rx diagnosis
+- 4fa3e3bce add: option to force string in db quote; fix: int-only reject codes coercing to an int and getting every description with that int
+- 3f647c042 add: send AWP cost basis code
+- 84f1c3993 add: send ClaimDate as tx date_filled when making a claim - this will populate it as the Date of Service
+- 128aedb14 fix: send proper units for observation weight/height
+- dc80c5189 fix: only add diagnosis to be sent if it has a code - and fallback the qualifier to 0
+- 78c44f194 add: support sending and receiving the professional service fee
+- 7b80bc42a add: send compound type if available
+- a758f7e42 add: logic to get error from NCPDP table
+- d4a48eac1 config: tccompound system pharmetika
+- baa0e2849 add: insurance gbl migration documentation
+- 58483a82e Merge pull request #2666 from Pharmetika/production_20260112
+- b8b5d4cc5 add: logic to send ProductIdQual and NDC based on compound or not
+- 705355630 add: also send LOE in DURPPS
+- 845db1149 fix: add Level of Effort in CompoundDrugInfo
+- 00cbec2b3 fix: force ingredient costs that are less than a cent to be a cent
+- 2d502ebf2 add: don't send DUR/PPS if all values are empty
+- 23b9b2459 config: integrity system pharmetika
+- c8a1a67b0 improve: send ivalue cost just in case
+- 48046e9b4 fix: let compound_quantity be quantity_dispensed, not formula quantity
+- 9935507ad fix: calculate quantity_ratio for formula ingredients based on quantity dispensed
+- 0403f41fb hotfix: temporarily disable clinical_info awaiting SS to respond about some field errors
+- 7fc614deb config: procompounding disable speedscript cron
+- 3dc23d239 config: procompounding system pharmetika
+- 24ce84c7c fix: some legacy PBMs require a claim date to differentiate claims for the same rx# instead of fill number
+- a6325792f fix: move authorizenet from lwp useragent to mojo useragent due to obscure error - hostname verification failed with LWP
+- 7fc5ffee1 Merge branch 'feature/ssapi_insurance_billing' of github.com:Pharmetika/pmk into feature/ssapi_insurance_billing
+- c061e7618 fix: use full IP for pmk-speedscript in database connections
+- 6ba535b2b improve: explicit initializations in error logic
+- f9f2718f8 improve: realm_id use for claim_log where not used already
+- aaa517fb0 noissue: remove respond_to hashref (it worked regardless, but is un-necessary)
+- c2a103fe2 fix: accidental fat arrow for map_origin_to_code definition
+- 4719fae01 add: CONVERSION - support for alternate formula ID
+- 119db2a66 fix: send forced ndc11 for ndc fields
+- 711bc0c5b improve: show reject codes
+- 3289aba06 improve: claim failed -> claim rejected
+- 84d6ae73f improve: awp * quantity
+- 6167520c2 improve: functionalize error message retrieval; improve: combine message with additional info if available
+- 88dfbf913 fix: IIN -> BIN could strip more than 2 digits for number like 00600000; fix: ADDITIONAL_MESSAGE_INFORMATION is not always an array
+- f2177b27a fix: source pricing from different part of data - previous area was incorrect
+- 8535fcb0c improve: refactor logic to better support storing pricing now that previous logic is removed
+- 9e9cfacf8 fix: move endpoint wrapper for claim reversal so PMKMojo can use it
+- 76bd43d20 fix: wrong capitalization for package name when reversing claims
+- 490139502 improve: get rid of old ssapi insurance code - pass claim details to transaction
+- 58d031003 fix: use new table for claim list on tx history
+- 8654c80d0 fix: not properly quoting 
+- fbb438dd0 fix: missing undef in ->do
+- 06e3ea387 fix: speedscript not properly converting gender to ncpdp, so we will ourselves
+- c80078bef fix: and not or - sex can never be both M and F
+- 25377ae63 fix: get dose form code and convert to nonsensical speedscript value; fix: send routeofadmin not it's description
+- 85497c9d2 fix: change gender field to conform to openssapi gender values M/F/O/A
+- 88f5da285 fix: don't send observations if patient declined to provide is checked
+- bb08f2680 fix: always send IdQual 03 to signify NDC
+- f06af2f70 fix: use pharmacy NPI instead of provider NPI
+- d65633e16 noissue: uncomment cURL
+- 786728058 config: scriptworks system pharmetika
+- a32da28b5 Merge pull request #2643 from Pharmetika/production_20260112
+- 0b2cb531b add: logic to reverse claim on fill void
+- 61699a696 improve: replace old claim table with new in prescription.pm
+- 5453069b6 improve: replace old claim table usage with new table in some places
+- 87fbbf368 add: accept claim to add tx_id to claim; add: support setting claim status by tx_id
+- 5ddecdf45 remove: unused old auth fields
+- 32fac50bb add: route to reverse insurance claim
+- 82ecc09b9 add: refactor config to support production / staging credentials
+- 5309c88d3 add: claim reversal support
+- 3cb36e40e fix: not setting claim status - wrong args order
+- 4d8f24925 add: logic to send NCPDP in path instead of storeid
+- 3ac12aa32 fix: not using regexed iin; add: use prescriber npi
+- 1268e7a68 add: use header error message if available
+- bb116b480 noissue: remove old if
+- 655352f22 add: claim identifier and status support
+- f707344ee add: claim billing handling to Fill.pm
+- 144724886 fix: reverse pricing values
+- 72e37f987 add: logic to record claim when submitted
+- 36ee0acf3 improve: error handling and returning for failed claims
+- ed68fe19d fix: parse iin to bin (ssapi currently only supports 6 digits)
+- aa3fdaa4a add: select third party payor from billing data
+- 69127d025 fix: syntax error for map definition
+- 8603d3047 fix: ssapi doesn't use the same codes as ncpdp for their diagnosis code qualifier
+- 4c3286053 add: sending more addtl. fields
+- c1a089c86 add: send ingredient cost
+- 4c128cb4f add: send diagnoses with claim
+- 40eae8078 add: initial support to parse results of a billed claim
+- 68963f520 add: origin code support
+- ca97b0cfd add: ClaimNumber and FillNumber
+- 4ee2cc001 add: more request_data -> args
+- 066d77e07 add: initialize billing claim on fill
+- 015f2bc32 improve: request_data -> args
+- e704fa09c add: send prescriber identifier
+- e0c943754 fix: send as json
+- cce405933 fix: days_supply tx level
+- f70203a18 add: further misc fields
+- 33ca0d8a4 add: send header values
+- beaf33845 add: initial insurance object
+- 55968ee9e add: initial durppsinfo
+- 6def1ac75 Merge pull request #2589 from Pharmetika/feature/gbl_coverage_tables
+- d900b6891 fix: wrong returning for date
+- d339366c5 deprecate: legacy third party payor API; add: coverage_entity API
+- a707e3abb deprecate: legacy third party payor API; add: coverage_entity API
+- 81c9b8dfa fix: migrate to gbl coverage tables
+- 8c95750fd fix: syntax + change from pharmacy_sytem_record_id
+- 5c0547ae7 fix: migrate to gbl table
+- 2f4933839 fix: skip archived coverage resources
+- fdf9ea645 fix: table definition update
+- 516bd73fb fix: iin not correct - REQUIRES UI CHANGE
+- 8465112db noissue
+- 379fd2055 noissue
+- 864cf8140 add: use newer gbl coverage tables
+- 2a2196b18 noissue
+- 5c09dd297 add: use patient_coverage_record_id in place of pharmacy_system_patient_payer_record_id
+- d17735ef1 WIP: deprecate SSAPI; add: function to map pmk to new SSAPI
+- a4423ea3c add: migration script for coverage tables
+- 5bc11cd88 add: full route for claim billing
+- efc1946d3 add: further call_api logic for billing
+- 2f4c249b2 fix: top-level quantity not in CompoundInfo
+- 6f11197ea fix: need to expliclty use SpeedScript::Drug to access the our variable in time; improve: use the function instead of directly accessing the hash map
+- aaa9812ca fix: properly push ingredients and put in payload
+- 88867f9f6 fix: filter address lines for length
+- 33ee4e607 fix: comma not period - accidental concat
+- 5f7e2fab2 add: ingredient and product quantities
+- 9a126fbc2 add: weight & height for insurance claim
+- 313ed509c add: initial claim product data
+- 67a7a6801 add: call_api endpoint support
+- cd2e89ebe add: pmk to ss prescriber for claim
+- 8ff690290 add: initial map pmk data to ss data for claim; add: logic for pmk -> ss patient map
+- 514dcaaba add: initialize claims module
+- 3eaf2eb91 config: claims openssapi cert
+- 20c1d1582 config: additional ssapi config
+
+

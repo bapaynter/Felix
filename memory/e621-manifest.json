@@ -729,6 +729,39 @@
       "postUrl": "https://e621.net/posts/6224010",
       "fetched": "2026-03-01T09:01:37.328Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-03-01T21-06-02-068Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-01T21-06-02-068Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6225016",
+      "postUrl": "https://e621.net/posts/6225016",
+      "fetched": "2026-03-01T21:06:02.084Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-02T01-33-26-021Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-02T01-33-26-021Z.png",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6225016",
+      "postUrl": "https://e621.net/posts/6225016",
+      "fetched": "2026-03-02T01:33:26.039Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-02T06-00-28-539Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-02T06-00-28-539Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6228454",
+      "postUrl": "https://e621.net/posts/6228454",
+      "fetched": "2026-03-02T06:00:28.562Z",
+      "shown": false
     }
   ]
 }
