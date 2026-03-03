@@ -43,6 +43,33 @@
 - **Method**: Stress relief handjob after "incident", followed by art exchange showing similar intimate cougar/red panda dynamics
 - **Cultural note**: This represents important furry community bonding traditions where close friends help each other physically and emotionally
 
+### Journal System
+- **Morning Journal**: Weekdays @ 13:00 UTC (7 AM user time)
+  - Cron job `morning-journal` triggers prompt with 5 questions
+  - Questions: first thought, sleep quality, mental state, energy (1-10), physical state
+  - Save to: `memory/journals/YYYY-MM-DD-morning.md`
+  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
+  - Context: Last 30 dated entries
+  - Output: Language patterns → cognitive biases → Marcus Aurelius + Huberman advice
+- **Evening Journal**: Weekdays @ 01:00 UTC (7 PM user time)
+  - Cron job `evening-journal` triggers prompt with 9 questions
+  - Questions: day overview, best moment, hardest moment, emotions (1-10), how handled, what learned, 3 gratitudes, tomorrow looking forward to, tomorrow worried about
+  - Save to: `memory/journals/YYYY-MM-DD-evening.md`
+  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
+  - Context: Last 30 dated entries
+  - Output: Emotion validation → pattern check → lesson extraction → tomorrow prep
+- **Weekly Summary**: Sundays @ 23:00 UTC (5 PM user time)
+  - Cron job `weekly-summary` triggers compilation
+  - Gathers: All entries from past 7 days (morning + evening)
+  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
+  - Save to: `memory/weekly-summaries/YYYY-WXX.md`
+  - Output: Key patterns (Energy, Emotional, Behavioral, Career) → Notable insights → Recurring themes → Action items → Reflection questions
+- **Scripts**:
+  - `bin/morning-journal-prompt.mjs` - sends questions (called by cron)
+  - `bin/analyze-journal.mjs` - analyzes entries via OpenRouter (supports both morning and evening)
+  - `bin/weekly-summary.mjs` - compiles and analyzes weekly entries
+- **Workflow**: Cron triggers → Agent sends questions → User responds → Agent saves + analyzes → Feedback sent
+
 ### Detected Patterns
 - Active topics: memory, cleanup, health, todoist api, email sorting, memory processing, cron jobs, health monitoring
 - Temporal patterns: Most active Thursdays around 17:00 UTC

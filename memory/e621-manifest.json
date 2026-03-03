@@ -761,6 +761,50 @@
       "postId": "6228454",
       "postUrl": "https://e621.net/posts/6228454",
       "fetched": "2026-03-02T06:00:28.562Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-03-02T10-00-30-292Z.gif",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-02T10-00-30-292Z.gif",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6225967",
+      "postUrl": "https://e621.net/posts/6225967",
+      "fetched": "2026-03-02T10:00:30.309Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-02T14-05-51-109Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-02T14-05-51-109Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6226388",
+      "postUrl": "https://e621.net/posts/6226388",
+      "fetched": "2026-03-02T14:05:51.226Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-03T05-01-47-630Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-03T05-01-47-630Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6231959",
+      "postUrl": "https://e621.net/posts/6231959",
+      "fetched": "2026-03-03T05:01:47.704Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-03T09-02-18-969Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-03T09-02-18-969Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6229666",
+      "postUrl": "https://e621.net/posts/6229666",
+      "fetched": "2026-03-03T09:02:18.980Z",
       "shown": false
     }
   ]
