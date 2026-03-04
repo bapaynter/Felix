@@ -438,6 +438,42 @@ echo "L4767-electriclab" | sudo -S apt update -qq && sudo -S apt install -y -qq 
 
 Use `-S` flag to read password from stdin for automated installs.
 
+## Journal Analysis Scripts
+
+Scripts for analyzing journal entries using OpenRouter (Gemini 3 Pro Preview).
+
+**Location:** `bin/analyze-journal.mjs`
+
+### Commands
+
+```bash
+# Analyze an entry
+node bin/analyze-journal.mjs analyze "Journal entry content here" [morning|evening]
+
+# Save an entry manually
+node bin/analyze-journal.mjs save "Journal content" [morning|evening]
+
+# List all entries of a type
+node bin/analyze-journal.mjs list [morning|evening]
+```
+
+### Analysis Prompts
+
+**Morning Analysis:**
+- Analyzes language patterns, emotional tone, metaphors
+- Checks for cognitive biases and limiting beliefs
+- Provides Marcus Aurelius + Andrew Huberman advice
+
+**Evening Analysis:**
+- Emotion validation: Normalize what I'm feeling
+- Pattern check: Have I mentioned similar struggles recently?
+- Lesson extraction: What's the real learning here beyond the surface?
+- Tomorrow prep: Based on what I'm worried about, what's one thing I can do to feel more prepared?
+
+### Note
+
+The cron jobs don't actually use these scripts — they inject system events into the main session and the agent handles everything in-context. These scripts exist for manual/standalone use if needed.
+
 ---
 
 ## Common Mistakes & Fixes

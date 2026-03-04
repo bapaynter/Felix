@@ -39,3 +39,18 @@
 - 65991a9 fix scroll to auto, see if I cn push to main... hehe
 
 
+# Git Activity - 2026-03-03
+
+## pmk
+- 6bfd1959f Merge pull request #2710 from Pharmetika/fix/rvp_rx_search_for_leading_9
+- cdf45a778 fix: rx number search for rvp - they are still on speedscript assignment and are getting rxes with leading 9
+
+
+# Git Activity - 2026-03-03
+
+## provider-admin-portal
+- 906b355 default enqueue to true
+- 9ea7db2 Merge branch 'main' of github.com:Pharmetika/provider-admin-portal
+- 6407cfd improve styling, fix pmp uti
+
+
