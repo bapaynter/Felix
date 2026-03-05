@@ -87,7 +87,7 @@ ${analysisPrompt}`
       'X-Title': 'OpenClaw Journal Analysis'
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-pro-preview',
+      model: 'openai/gpt-5.3-chat',
       messages,
       temperature: 0.7
     })

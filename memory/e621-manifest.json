@@ -850,6 +850,61 @@
       "postUrl": "https://e621.net/posts/6232941",
       "fetched": "2026-03-04T06:17:17.452Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-03-04T10-32-28-303Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-04T10-32-28-303Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6232941",
+      "postUrl": "https://e621.net/posts/6232941",
+      "fetched": "2026-03-04T10:32:28.312Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-04T14-37-29-994Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-04T14-37-29-994Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6232941",
+      "postUrl": "https://e621.net/posts/6232941",
+      "fetched": "2026-03-04T14:37:30.003Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-04T18-43-31-281Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-04T18-43-31-281Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6232941",
+      "postUrl": "https://e621.net/posts/6232941",
+      "fetched": "2026-03-04T18:43:31.291Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-04T22-46-04-412Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-04T22-46-04-412Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6232941",
+      "postUrl": "https://e621.net/posts/6232941",
+      "fetched": "2026-03-04T22:46:04.423Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-05T06-54-30-189Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-05T06-54-30-189Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6234141",
+      "postUrl": "https://e621.net/posts/6234141",
+      "fetched": "2026-03-05T06:54:30.204Z",
+      "shown": false
     }
   ]
 }
