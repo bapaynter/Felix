@@ -158,3 +158,7 @@ With heartbeat running every hour and checks at 4-hour intervals, each check run
 - No AI tasks to process
 - Proactive scan passed with no issues
 - Check ran successfully but no action needed
+
+## CRITICAL: Response Format
+
+When responding to heartbeat polls, you MUST reply with ONLY the exact string `HEARTBEAT_OK`. Nothing else. No additional text, no emojis, no explanation. The system treats this as an acknowledgment and may discard everything else.

@@ -387,7 +387,7 @@
       "postId": "2441691",
       "postUrl": "https://e621.net/posts/2441691",
       "fetched": "2026-02-22T07:01:54.060Z",
-      "shown": false
+      "shown": true
     },
     {
       "filename": "e621-2026-02-22T11-03-03-405Z.jpg",
@@ -904,6 +904,50 @@
       "postId": "6234141",
       "postUrl": "https://e621.net/posts/6234141",
       "fetched": "2026-03-05T06:54:30.204Z",
+      "shown": true
+    },
+    {
+      "filename": "e621-2026-03-05T11-00-28-484Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-05T11-00-28-484Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6234141",
+      "postUrl": "https://e621.net/posts/6234141",
+      "fetched": "2026-03-05T11:00:28.491Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-05T15-00-27-539Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-05T15-00-27-539Z.jpg",
+      "tags": [
+        "red_panda"
+      ],
+      "postId": "6234141",
+      "postUrl": "https://e621.net/posts/6234141",
+      "fetched": "2026-03-05T15:00:27.549Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-05T19-00-39-551Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-05T19-00-39-551Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6235395",
+      "postUrl": "https://e621.net/posts/6235395",
+      "fetched": "2026-03-05T19:00:40.026Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-06T07-18-27-542Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-06T07-18-27-542Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6237394",
+      "postUrl": "https://e621.net/posts/6237394",
+      "fetched": "2026-03-06T07:18:27.563Z",
       "shown": false
     }
   ]
