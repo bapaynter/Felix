@@ -949,6 +949,72 @@
       "postUrl": "https://e621.net/posts/6237394",
       "fetched": "2026-03-06T07:18:27.563Z",
       "shown": false
+    },
+    {
+      "filename": "e621-2026-03-06T11-36-53-523Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-06T11-36-53-523Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6237532",
+      "postUrl": "https://e621.net/posts/6237532",
+      "fetched": "2026-03-06T11:36:53.531Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-06T15-56-47-884Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-06T15-56-47-884Z.jpg",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6237244",
+      "postUrl": "https://e621.net/posts/6237244",
+      "fetched": "2026-03-06T15:56:47.921Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-06T19-59-45-108Z.png",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-06T19-59-45-108Z.png",
+      "tags": [
+        "furry"
+      ],
+      "postId": "6239305",
+      "postUrl": "https://e621.net/posts/6239305",
+      "fetched": "2026-03-06T19:59:45.122Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-07T00-00-21-895Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-07T00-00-21-895Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6240942",
+      "postUrl": "https://e621.net/posts/6240942",
+      "fetched": "2026-03-07T00:00:21.943Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-07T04-32-00-349Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-07T04-32-00-349Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6240942",
+      "postUrl": "https://e621.net/posts/6240942",
+      "fetched": "2026-03-07T04:32:00.393Z",
+      "shown": false
+    },
+    {
+      "filename": "e621-2026-03-07T08-34-22-441Z.jpg",
+      "path": "/home/pi/.openclaw/workspace/images/e621/e621-2026-03-07T08-34-22-441Z.jpg",
+      "tags": [
+        "health"
+      ],
+      "postId": "6240942",
+      "postUrl": "https://e621.net/posts/6240942",
+      "fetched": "2026-03-07T08:34:22.487Z",
+      "shown": false
     }
   ]
 }

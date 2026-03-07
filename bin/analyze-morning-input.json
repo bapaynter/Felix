@@ -1,0 +1,9 @@
+{
+  "model": "google/gemini-2.5-pro-preview",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Analyze the latest morning journal entry (2026-03-06) and the last 7 days of entries. Provide:\n\n## Analysis (2-3 sentences max each)\n\n**Language & Tone:**\n- What's the pattern in how Trolly describes his mornings vs evenings?\n- Any recurring metaphors or phrases?\n\n**Emotional Journey:**\n- What's the trend in energy levels?\n- How is work stress showing up?\n- Any signs of cognitive biases or limiting beliefs?\n\n**Today's Entry Specifically:**\n- What stands out about today compared to the rest of the week?\n\n## Marcus Aurelius + Huberman Advice (2-3 sentences max)\n\nBased on today's entry: Energy at 7/10, low emotional level, excited for show tonight and seeing Andy, physical sweatiness but feeling restored from excellent sleep (8h+, watch says excellent). What would Marcus say about maintaining equanimity while looking forward to pleasure? What would Huberman say about the sleep quality and physical state?"
+    }
+  ]
+}

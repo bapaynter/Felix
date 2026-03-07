@@ -295,7 +295,7 @@ bash pty:true workdir:~/project background:true command:"opencode run 'Your task
 
 ## Sending Images (Telegram)
 
-**Important:** The workspace `/images` folder is NOT an allowed directory for sending media via Telegram. 
+**Important:** The workspace `/images` folder is NOT an allowed directory for sending media via Telegram.
 
 **Workaround:** Copy images to `/tmp` first, then send using `filePath`:
 
@@ -307,7 +307,11 @@ exec({ command: 'cp /home/pi/.openclaw/workspace/images/e621/image.jpg /tmp/imag
 message({ action: 'send', filePath: '/tmp/image.jpg', message: 'caption' });
 ```
 
-Also remember to update the e621 manifest to mark images as `shown: true` after sending.
+### e621 Art Collection
+
+**Issue:** The e621-manifest.json sometimes has null values for file/url fields, breaking lookups.
+
+**Fix:** Don't rely on the manifest — use `ls -lt images/e621/` to find recent images directly, then copy and send.
 
 ## Playwright Browser Control
 
