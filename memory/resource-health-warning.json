@@ -2,11 +2,11 @@
   "name": "Resource Health Warning",
   "schedule": {
     "kind": "at",
-    "at": "2026-02-16T18:31:02.354Z"
+    "at": "2026-03-08T08:31:25.386Z"
   },
   "payload": {
     "kind": "systemEvent",
-    "text": "⚠️ RESOURCE HEALTH WARNING\n\n🟡 PROCESSES: 1 zombie(s): 0 old (>24h), 1 recent\n   💡 Normal short-lived zombies\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"
+    "text": "⚠️ RESOURCE HEALTH WARNING\n\n🟡 PROCESSES: 1 zombie(s): 1 old (>24h), 0 recent\n   💡 Attempted cleanup of old zombies\n\nCheck resource logs: /home/pi/.openclaw/workspace/memory/health-resources.log"
   },
   "sessionTarget": "main",
   "enabled": true
