@@ -44,30 +44,39 @@
 - **Cultural note**: This represents important furry community bonding traditions where close friends help each other physically and emotionally
 
 ### Journal System
+- **Storage**: `memory/journals.json` (consolidated JSON file)
+  - Contains all entries with date, type, content, createdAt
+  - Markdown files still created for human readability (`memory/journals/YYYY-MM-DD-morning.md`)
 - **Morning Journal**: Weekdays @ 13:00 UTC (7 AM user time)
   - Cron job `morning-journal` triggers prompt with 5 questions
   - Questions: first thought, sleep quality, mental state, energy (1-10), physical state
-  - Save to: `memory/journals/YYYY-MM-DD-morning.md`
-  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
-  - Context: Last 30 dated entries
+  - Save: `node bin/analyze-journal.mjs save "<content>" morning`
+  - Analyze: `node bin/analyze-journal.mjs analyze "<content>" morning`
+  - Model: Claude Sonnet 4.6 (`anthropic/claude-sonnet-4.6`)
+  - Context: Last 30 entries from JSON
   - Output: Language patterns → cognitive biases → Marcus Aurelius + Huberman advice
 - **Evening Journal**: Weekdays @ 01:00 UTC (7 PM user time)
   - Cron job `evening-journal` triggers prompt with 9 questions
   - Questions: day overview, best moment, hardest moment, emotions (1-10), how handled, what learned, 3 gratitudes, tomorrow looking forward to, tomorrow worried about
-  - Save to: `memory/journals/YYYY-MM-DD-evening.md`
-  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
-  - Context: Last 30 dated entries
+  - Save: `node bin/analyze-journal.mjs save "<content>" evening`
+  - Analyze: `node bin/analyze-journal.mjs analyze "<content>" evening`
+  - Model: Claude Sonnet 4.6 (`anthropic/claude-sonnet-4.6`)
+  - Context: Last 30 entries from JSON
   - Output: Emotion validation → pattern check → lesson extraction → tomorrow prep
 - **Weekly Summary**: Sundays @ 23:00 UTC (5 PM user time)
   - Cron job `weekly-summary` triggers compilation
   - Gathers: All entries from past 7 days (morning + evening)
-  - Analyze with: Gemini 3 Pro Preview (`google/gemini-2.5-pro-preview`)
+  - Model: Claude Sonnet 4.6 (`anthropic/claude-sonnet-4.6`)
   - Save to: `memory/weekly-summaries/YYYY-WXX.md`
   - Output: Key patterns (Energy, Emotional, Behavioral, Career) → Notable insights → Recurring themes → Action items → Reflection questions
 - **Scripts**:
-  - `bin/morning-journal-prompt.mjs` - sends questions (called by cron)
-  - `bin/analyze-journal.mjs` - analyzes entries via OpenRouter (supports both morning and evening)
-  - `bin/weekly-summary.mjs` - compiles and analyzes weekly entries
+  - `bin/analyze-journal.mjs` - main script for save/analyze/list/context
+  - `bin/migrate-journals.mjs` - one-time migration (can be deleted)
+- **Commands**:
+  - `node bin/analyze-journal.mjs list morning` - list entries
+  - `node bin/analyze-journal.mjs context evening` - show context count
+  - `node bin/analyze-journal.mjs save "<content>" morning` - save entry
+  - `node bin/analyze-journal.mjs analyze "<content>" morning` - analyze with context
 - **Workflow**: Cron triggers → Agent sends questions → User responds → Agent saves + analyzes → Feedback sent
 
 ### Detected Patterns

@@ -442,22 +442,34 @@ Use `-S` flag to read password from stdin for automated installs.
 
 ## Journal Analysis Scripts
 
-Scripts for analyzing journal entries using OpenRouter (Gemini 3 Pro Preview).
+Scripts for analyzing journal entries using OpenRouter (Claude Sonnet 4.6).
 
 **Location:** `bin/analyze-journal.mjs`
+
+### Storage
+
+- **JSON file:** `memory/journals.json` - all entries consolidated
+- **Markdown files:** `memory/journals/YYYY-MM-DD-morning.md` - for human readability
 
 ### Commands
 
 ```bash
-# Analyze an entry
-node bin/analyze-journal.mjs analyze "Journal entry content here" [morning|evening]
-
-# Save an entry manually
-node bin/analyze-journal.mjs save "Journal content" [morning|evening]
-
-# List all entries of a type
+# List entries
 node bin/analyze-journal.mjs list [morning|evening]
+
+# Show context count (last 30)
+node bin/analyze-journal.mjs context [morning|evening]
+
+# Save an entry
+node bin/analyze-journal.mjs save "Entry content" [morning|evening]
+
+# Analyze an entry (auto-fetches last 30 entries from JSON)
+node bin/analyze-journal.mjs analyze "Entry content" [morning|evening]
 ```
+
+### Model
+
+Uses **Claude Sonnet 4.6** (`anthropic/claude-sonnet-4.6`) for all analysis.
 
 ### Analysis Prompts
 
@@ -474,7 +486,7 @@ node bin/analyze-journal.mjs list [morning|evening]
 
 ### Note
 
-The cron jobs don't actually use these scripts — they inject system events into the main session and the agent handles everything in-context. These scripts exist for manual/standalone use if needed.
+The cron jobs inject system events into the main session and the agent handles everything in-context. These scripts are used by the agent when the cron fires.
 
 ---
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Journal Analysis Script
- * Analyzes journal entries using OpenRouter (Gemini 3 Pro Preview)
+ * Analyzes journal entries using OpenRouter (Claude Sonnet 4.6)
  * Provides language analysis, cognitive bias detection, and personalized advice
  */
 
 import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join, basename } from 'path';
+import { join } from 'path';
 import { config } from 'dotenv';
 
 // Load environment
@@ -14,6 +14,10 @@ config({ path: '/home/pi/.openclaw/workspace/.openclaw-env' });
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const JOURNALS_DIR = '/home/pi/.openclaw/workspace/memory/journals';
+const JOURNALS_JSON = '/home/pi/.openclaw/workspace/memory/journals.json';
+
+// Hardcoded model
+const MODEL = 'anthropic/claude-sonnet-4.6';
 
 const MORNING_ANALYSIS_PROMPT = `Above you'll find my reflection immediately after waking up. 
 
@@ -41,10 +45,31 @@ Help me with:
 
 Your tone should be warm but honest. Don't sugarcoat patterns I need to address.`;
 
+/**
+ * Read entries from journals.json
+ */
+function getEntries(journalType = 'morning') {
+  if (!existsSync(JOURNALS_JSON)) {
+    return [];
+  }
+  
+  const json = JSON.parse(readFileSync(JOURNALS_JSON, 'utf-8'));
+  return (json.entries || [])
+    .filter(e => e.type === journalType)
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/**
+ * Get last 30 entries for context
+ */
+function getLast30Entries(journalType) {
+  const entries = getEntries(journalType);
+  return entries.slice(-30);
+}
+
 async function callOpenRouter(entries, todayEntry, journalType = 'morning') {
   // Build context from last 30 entries
   const contextEntries = entries
-    .slice(-30)
     .map(e => `## ${e.date}\n${e.content}`)
     .join('\n\n---\n\n');
   
@@ -87,7 +112,7 @@ ${analysisPrompt}`
       'X-Title': 'OpenClaw Journal Analysis'
     },
     body: JSON.stringify({
-      model: 'openai/gpt-5.3-chat',
+      model: MODEL,
       messages,
       temperature: 0.7
     })
@@ -102,33 +127,54 @@ ${analysisPrompt}`
   return data.choices[0].message.content;
 }
 
-function getEntries(journalType = 'morning') {
-  if (!existsSync(JOURNALS_DIR)) {
-    return [];
-  }
-  
-  const files = readdirSync(JOURNALS_DIR)
-    .filter(f => f.endsWith(`-${journalType}.md`))
-    .sort()
-    .map(f => {
-      const content = readFileSync(join(JOURNALS_DIR, f), 'utf-8');
-      const date = f.replace(`-${journalType}.md`, '');
-      return { date, content };
-    });
-  
-  return files;
-}
-
+/**
+ * Save entry to both JSON and markdown file
+ */
 function saveEntry(content, journalType = 'morning') {
+  // Ensure directories exist
   if (!existsSync(JOURNALS_DIR)) {
     mkdirSync(JOURNALS_DIR, { recursive: true });
   }
   
   const date = new Date().toISOString().split('T')[0];
+  const now = new Date().toISOString();
+  
+  // Save to markdown file (for backwards compatibility / human readability)
   const filename = `${date}-${journalType}.md`;
   const filepath = join(JOURNALS_DIR, filename);
-  
   writeFileSync(filepath, content, 'utf-8');
+  
+  // Update JSON file
+  const newEntry = {
+    date,
+    type: journalType,
+    content,
+    createdAt: now
+  };
+  
+  let json = { version: 1, lastUpdated: now, entries: [] };
+  
+  if (existsSync(JOURNALS_JSON)) {
+    json = JSON.parse(readFileSync(JOURNALS_JSON, 'utf-8'));
+  }
+  
+  // Remove existing entry for same date/type if exists
+  json.entries = json.entries.filter(e => !(e.date === date && e.type === journalType));
+  
+  // Add new entry
+  json.entries.push(newEntry);
+  
+  // Sort entries
+  json.entries.sort((a, b) => {
+    const dateCompare = a.date.localeCompare(b.date);
+    if (dateCompare !== 0) return dateCompare;
+    return a.type === 'morning' ? -1 : 1;
+  });
+  
+  json.lastUpdated = now;
+  
+  writeFileSync(JOURNALS_JSON, JSON.stringify(json, null, 2), 'utf-8');
+  
   return filepath;
 }
 
@@ -146,7 +192,7 @@ async function main() {
       process.exit(1);
     }
     
-    const entries = getEntries(journalType);
+    const entries = getLast30Entries(journalType);
     const analysis = await callOpenRouter(entries, todayEntry, journalType);
     console.log(analysis);
     
@@ -168,8 +214,15 @@ async function main() {
     const entries = getEntries(type);
     console.log(JSON.stringify(entries, null, 2));
     
+  } else if (command === 'context') {
+    // Show last 30 entries context
+    const type = args[1] || 'morning';
+    const entries = getLast30Entries(type);
+    console.log(`Last ${entries.length} ${type} entries:`);
+    entries.forEach(e => console.log(`  - ${e.date}`));
+    
   } else {
-    console.error('Commands: analyze, save, list');
+    console.error('Commands: analyze, save, list, context');
     process.exit(1);
   }
 }
