@@ -2,7 +2,7 @@
   "name": "Resource Health Warning",
   "schedule": {
     "kind": "at",
-    "at": "2026-03-09T08:31:23.299Z"
+    "at": "2026-03-10T08:59:58.747Z"
   },
   "payload": {
     "kind": "systemEvent",

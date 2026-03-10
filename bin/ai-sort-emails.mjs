@@ -27,16 +27,20 @@ function getKeyringPassword() {
   }
 }
 
-function gogCommand(cmd) {
+function gogCommand(cmd, options = {}) {
   const password = getKeyringPassword();
   if (!password) {
     console.error('No keyring password found');
     return '';
   }
   
+  // Build command string - only add --plain if not requesting JSON
+  const usePlain = !cmd.includes('--json') && options.plain !== false;
+  const plainFlag = usePlain ? '--plain' : '';
+  
   try {
     const output = execSync(
-      `export GOG_KEYRING_PASSWORD="${password}" && gog gmail ${cmd} --account ${GOG_ACCOUNT} --plain`,
+      `export GOG_KEYRING_PASSWORD="${password}" && gog gmail ${cmd} --account ${GOG_ACCOUNT} ${plainFlag}`,
       { encoding: 'utf8', timeout: 30000 }
     );
     return output.trim();
@@ -182,8 +186,8 @@ Reply with ONLY the category name.`;
 }
 
 async function sortEmails() {
-  // Get unread emails from inbox
-  const output = gogCommand("search 'in:inbox is:unread' --max 20");
+  // Get all unread emails (not just inbox)
+  const output = gogCommand("search 'is:unread' --max 20");
   const lines = output.split('\n').filter(l => l.match(/^\S+\t\d{4}-\d{2}-\d{2}/));
   
   if (lines.length === 0) {
@@ -217,10 +221,17 @@ async function sortEmails() {
     // Categorize
     const category = await categorizeWithAI(from, subject);
     
-    // Apply single label and remove from INBOX
+    // Apply single label
     try {
       gogCommand(`labels modify ${msgId} --add "${category}"`);
-      gogCommand(`labels modify ${msgId} --remove "INBOX"`);
+      
+      // Only remove from INBOX if it's currently in INBOX
+      const existingLabels = gogCommand(`get ${msgId} --json`);
+      const parsed = JSON.parse(existingLabels);
+      if (parsed.labelIds?.includes('INBOX')) {
+        gogCommand(`labels modify ${msgId} --remove "INBOX"`);
+      }
+      
       console.log(`→ ${category}: ${subject.substring(0, 50)}...`);
       sorted++;
     } catch (e) {

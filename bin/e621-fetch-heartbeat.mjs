@@ -154,24 +154,37 @@ async function run() {
   
   console.log(`🏷️  Will try: ${tagCandidates.join(', ')}`);
   
+  // Get already-fetched post IDs to avoid duplicates
+  const manifest = loadManifest();
+  const existingPostIds = new Set(manifest.images.map(img => img.postId));
+  console.log(`📦 Already have ${existingPostIds.size} posts in collection`);
+  
+  // Convert to comma-separated string for exclusion
+  const excludeParam = Array.from(existingPostIds).join(',');
+  
   // Try ONE tag at a time
   let result;
   let usedTag = null;
   
   for (const tag of tagCandidates) {
-    console.log(`🔍 Searching: "${tag}"`);
+    console.log(`🔍 Searching: "${tag}" (excluding ${existingPostIds.size} known posts)`);
     
     try {
+      // Search with exclusion to avoid duplicates
       const output = execSync(
-        `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tag}" --limit 50 --min-score ${MIN_SCORE} --order hot`,
+        `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tag}" --limit 20 --min-score ${MIN_SCORE} --order hot --exclude "${excludeParam}"`,
         { encoding: 'utf8', timeout: 30000 }
       );
-      result = JSON.parse(output);
+      const searchResult = JSON.parse(output);
       
-      if (result.file_url && !result.error) {
-        console.log('✅ Found image!');
+      // Check if we got a result
+      if (searchResult.file_url && !searchResult.error) {
+        console.log('✅ Found new image!');
+        result = searchResult;
         usedTag = tag;
         break;
+      } else if (searchResult.error && searchResult.error.includes('excluded')) {
+        console.log(`⚠️  All posts excluded for "${tag}", trying next tag...`);
       } else {
         console.log(`⚠️  No results for "${tag}"`);
       }
@@ -181,6 +194,30 @@ async function run() {
     
     // Small delay between attempts
     await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  
+  // If no new image found, try searching by date instead of hot
+  if (!result) {
+    console.log('🔄 Trying with date order for fresh content...');
+    for (const tag of tagCandidates) {
+      try {
+        const output = execSync(
+          `/home/pi/.openclaw/workspace/skills/e621-search/scripts/search.sh "${tag}" --limit 10 --min-score ${MIN_SCORE} --order date --exclude "${excludeParam}"`,
+          { encoding: 'utf8', timeout: 30000 }
+        );
+        const searchResult = JSON.parse(output);
+        
+        if (searchResult.file_url && !searchResult.error) {
+          console.log('✅ Found new image (by date)!');
+          result = searchResult;
+          usedTag = tag;
+          break;
+        }
+      } catch (e) {
+        console.log(`⚠️  Date search failed for "${tag}": ${e.message}`);
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
   }
   
   if (!result || !result.file_url || result.error) {

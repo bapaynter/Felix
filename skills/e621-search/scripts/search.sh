@@ -20,6 +20,7 @@ MIN_SCORE=0
 ORDER="hot"
 RESOLVE=true
 VERBOSE=false
+EXCLUDE_IDS=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -46,6 +47,10 @@ while [[ $# -gt 0 ]]; do
     --no-resolve)
       RESOLVE=false
       shift
+      ;;
+    --exclude)
+      EXCLUDE_IDS="$2"
+      shift 2
       ;;
     -v|--verbose)
       VERBOSE=true
@@ -129,6 +134,29 @@ POST_COUNT=$(echo "$RESPONSE" | jq -r '.posts | length' 2>/dev/null || echo "0")
 if [[ "$POST_COUNT" -eq 0 ]]; then
   echo '{"error":"No posts found","count":0}'
   exit 1
+fi
+
+# If exclude IDs provided, filter them out
+if [[ -n "$EXCLUDE_IDS" ]]; then
+  # Build jq filter to exclude IDs
+  EXCLUDE_FILTER=""
+  for id in $(echo "$EXCLUDE_IDS" | tr ',' ' '); do
+    if [[ -z "$EXCLUDE_FILTER" ]]; then
+      EXCLUDE_FILTER="select(.id != $id)"
+    else
+      EXCLUDE_FILTER="$EXCLUDE_FILTER | select(.id != $id)"
+    fi
+  done
+  
+  FILTERED_RESPONSE=$(echo "$RESPONSE" | jq "[.posts[] | $EXCLUDE_FILTER]")
+  POST_COUNT=$(echo "$FILTERED_RESPONSE" | jq 'length' 2>/dev/null || echo "0")
+  
+  if [[ "$POST_COUNT" -eq 0 ]]; then
+    echo '{"error":"All posts excluded","count":0}'
+    exit 1
+  fi
+  
+  RESPONSE="{\"posts\":$FILTERED_RESPONSE}"
 fi
 
 # Pick a random post
