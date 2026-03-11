@@ -64,7 +64,9 @@ async function checkCriticalHealth() {
             }
             
             if (memTotal > 0) {
-                memUsage = Math.round(((memTotal - memFree) / memTotal) * 100);
+                // Use MemAvailable for accurate available memory calculation
+                // memUsage = percentage of memory that is NOT available
+                memUsage = Math.round(((memTotal - memAvailable) / memTotal) * 100);
             }
         } catch (err) {
             // Skip memory check if fails

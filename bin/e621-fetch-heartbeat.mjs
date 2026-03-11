@@ -155,8 +155,8 @@ async function run() {
   console.log(`🏷️  Will try: ${tagCandidates.join(', ')}`);
   
   // Get already-fetched post IDs to avoid duplicates
-  const manifest = loadManifest();
-  const existingPostIds = new Set(manifest.images.map(img => img.postId));
+  const manifest_for_existing = loadManifest();
+  const existingPostIds = new Set(manifest_for_existing.images.map(img => img.postId));
   console.log(`📦 Already have ${existingPostIds.size} posts in collection`);
   
   // Convert to comma-separated string for exclusion
@@ -261,9 +261,9 @@ async function run() {
   console.log(`✅ Saved: ${filename}`);
   
   // Update manifest
-  const manifest = loadManifest();
-  manifest.images = cleanupOldImages(manifest);
-  manifest.images.push({
+  const manifest_final = loadManifest();
+  manifest_final.images = cleanupOldImages(manifest_final);
+  manifest_final.images.push({
     filename,
     path: filepath,
     tags: usedTag ? [usedTag] : [],
@@ -272,9 +272,9 @@ async function run() {
     fetched: new Date().toISOString(),
     shown: false
   });
-  saveManifest(manifest);
+  saveManifest(manifest_final);
   
-  console.log(`📋 Collection: ${manifest.images.length}/${MAX_IMAGES}`);
+  console.log(`📋 Collection: ${manifest_final.images.length}/${MAX_IMAGES}`);
   
   // Output for agent: just the file path and post URL
   console.log(`\n__FETCH_RESULT__`);

@@ -208,30 +208,21 @@ async function sortEmails() {
     const from = parts[2];
     const subject = parts[3];
     
-    // Skip if already has one of our labels (check fails gracefully if API errors)
+    // Skip if already has one of our labels
     try {
-      const existingLabels = gogCommand(`get ${msgId} --json`);
-      const parsed = JSON.parse(existingLabels);
-      const hasOurLabel = parsed.labelIds?.some(id => 
-        ['Label_11', 'Label_12', 'Label_13', 'Label_14', 'Dev', 'Support', 'Internal', 'Personal', 'GitHub', 'GhostInspector'].includes(id)
-      );
-      if (hasOurLabel) continue;
+      const existingLabelsRaw = gogCommand(`get ${msgId} --json`);
+      const parsed = JSON.parse(existingLabelsRaw);
+      const labelNames = (parsed.labelIds || []).map(id => id.toLowerCase());
+      const ourLabels = ['dev', 'support', 'internal', 'personal', 'github', 'ghostinspector'];
+      if (labelNames.some(id => ourLabels.includes(id))) continue;
     } catch {}
 
     // Categorize
     const category = await categorizeWithAI(from, subject);
     
-    // Apply single label
+    // Apply label and remove from INBOX
     try {
-      gogCommand(`labels modify ${msgId} --add "${category}"`);
-      
-      // Only remove from INBOX if it's currently in INBOX
-      const existingLabels = gogCommand(`get ${msgId} --json`);
-      const parsed = JSON.parse(existingLabels);
-      if (parsed.labelIds?.includes('INBOX')) {
-        gogCommand(`labels modify ${msgId} --remove "INBOX"`);
-      }
-      
+      gogCommand(`labels modify ${msgId} --add "${category}" --remove "INBOX"`);
       console.log(`→ ${category}: ${subject.substring(0, 50)}...`);
       sorted++;
     } catch (e) {

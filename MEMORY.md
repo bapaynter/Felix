@@ -84,3 +84,13 @@
 - Temporal patterns: Most active Thursdays around 17:00 UTC
 - Session count: 2 sessions tracked (Feb 11-12)
 - Session patterns tracked via pattern-tracker.mjs
+
+### System Issues - Lircd Zombie Process
+- **Issue**: Zombie process PID 1550 created Feb 16, 2026
+- **Status**: Parent process lircd (PID 1536) still running healthy
+- **Root cause**: lircd spawned child that exited without proper wait() call
+- **Impact**: None - benign system ghost, init will eventually reap it
+- **Duration**: 6+ days as of Mar 11 (and counting)
+- **Health check**: Flagged every 30 minutes by health-resources cron
+- **Action**: No intervention needed - just monitoring
+- **Tracking**: Documented in memory/2026-03-10.md and memory/2026-03-11.md
