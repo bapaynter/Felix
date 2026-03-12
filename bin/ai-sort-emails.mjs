@@ -174,10 +174,28 @@ Reply with ONLY the category name.`;
     });
 
     const data = await response.json();
-    const rawCategory = data.choices?.[0]?.message?.content?.trim();
+    
+    // Better error handling for various API response failures
+    if (!response.ok) {
+      console.error('OpenRouter API error:', data.error?.message || response.statusText);
+      return 'Personal';
+    }
+    
+    if (!data || typeof data !== 'object') {
+      console.error('Invalid API response:', JSON.stringify(data));
+      return 'Personal';
+    }
+    
+    const rawCategory = data?.choices?.[0]?.message?.content;
+    const trimmed = rawCategory ? rawCategory.trim() : '';
+    
+    // Log what the AI actually returned for debugging
+    if (trimmed) {
+      console.log(`AI returned: "${trimmed}"`);
+    }
     
     // Try fuzzy matching first, then fallback to Personal
-    const matched = matchCategory(rawCategory);
+    const matched = matchCategory(trimmed);
     return matched || 'Personal';
   } catch (e) {
     console.error('AI categorization failed:', e.message);

@@ -55,11 +55,12 @@ async function checkCriticalHealth() {
             const lines = memInfo.split('\n');
             let memTotal = 0, memFree = 0;
             
+            let memAvailable = 0;
             for (const line of lines) {
                 if (line.startsWith('MemTotal:')) {
                     memTotal = parseInt(line.split(/\s+/)[1]);
-                } else if (line.startsWith('MemFree:')) {
-                    memFree = parseInt(line.split(/\s+/)[1]);
+                } else if (line.startsWith('MemAvailable:')) {
+                    memAvailable = parseInt(line.split(/\s+/)[1]);
                 }
             }
             
